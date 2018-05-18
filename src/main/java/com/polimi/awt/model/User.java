@@ -1,12 +1,17 @@
 package com.polimi.awt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.NaturalId;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = "id")
 public class User {
 
     @Id
@@ -14,6 +19,8 @@ public class User {
     private Long id;
 
     @NotBlank
+    @NaturalId
+    @Column(unique = true)
     private String username;
 
     @NotBlank
@@ -23,7 +30,13 @@ public class User {
     private String emailAddress;
 
     @ManyToMany
-    private List<Role> roles;
+    private Set<Role> roles = new HashSet<>();
+
+    public User(String username, String password, String emailAddress) {
+        this.username = username;
+        this.password = password;
+        this.emailAddress = emailAddress;
+    }
 
     public Long getId() {
         return id;
@@ -57,11 +70,15 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addRole (Role role) {
+        roles.add(role);
     }
 }
