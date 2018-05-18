@@ -1,8 +1,6 @@
 package com.polimi.awt.model;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -26,14 +24,6 @@ public class User {
 
     @ManyToMany
     private List<Role> roles;
-
-    public User(Long id, String username, String password, String emailAddress, List<Role> roles) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.emailAddress = emailAddress;
-        this.roles = roles;
-    }
 
     public Long getId() {
         return id;

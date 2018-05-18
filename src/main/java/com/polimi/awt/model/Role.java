@@ -11,6 +11,14 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
+    public Role(String roleName) {
+        if (roleName.equals("WORKER")) {
+            this.roleName = RoleName.WORKER;
+        } else {
+            this.roleName = RoleName.MANAGER;
+        }
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,6 +1,7 @@
 package com.polimi.awt.controller;
 
 import com.polimi.awt.model.User;
+import com.polimi.awt.repository.RoleRepository;
 import com.polimi.awt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @PostMapping("/users")
     private User createUser(@RequestBody User user){
