@@ -1,6 +1,8 @@
 package com.polimi.awt.controller;
 
+import com.polimi.awt.model.RoleName;
 import com.polimi.awt.model.User;
+import com.polimi.awt.payload.SignupRequest;
 import com.polimi.awt.repository.RoleRepository;
 import com.polimi.awt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,17 @@ public class UserController {
     private RoleRepository roleRepository;
 
     @PostMapping("/users")
-    private User createUser(@RequestBody User user){
-        return userRepository.save(user);
+    private User createUser(@RequestBody SignupRequest signupRequest){
+
+        User newUser = new User (signupRequest.getUsername(), signupRequest.getPassword(), signupRequest.getEmailAddress());
+
+        if (signupRequest.getRole().equals("MANAGER")) {
+            newUser.addRole(roleRepository.findByName(RoleName.MANAGER));
+        }
+
+        else if (signupRequest.getRole().equals("WORKER")) {
+            newUser.addRole(roleRepository.findByName(RoleName.WORKER));
+        }
+        return userRepository.save(newUser);
     }
 }
