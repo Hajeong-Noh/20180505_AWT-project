@@ -2,6 +2,7 @@ package com.polimi.awt.model;
 
 public abstract class User {
 
+    private Long id;
     private String username;
     private String password;
     private String emailAddress;
