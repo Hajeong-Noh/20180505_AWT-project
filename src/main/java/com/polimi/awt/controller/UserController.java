@@ -1,6 +1,5 @@
 package com.polimi.awt.controller;
 
-import com.polimi.awt.model.RoleName;
 import com.polimi.awt.model.User;
 import com.polimi.awt.payload.SignupRequest;
 import com.polimi.awt.repository.RoleRepository;
@@ -26,13 +25,7 @@ public class UserController {
 
         User newUser = new User (signupRequest.getUsername(), signupRequest.getPassword(), signupRequest.getEmailAddress());
 
-        if (signupRequest.getRole().equals("MANAGER")) {
-            newUser.addRole(roleRepository.findByName(RoleName.MANAGER));
-        }
-
-        else if (signupRequest.getRole().equals("WORKER")) {
-            newUser.addRole(roleRepository.findByName(RoleName.WORKER));
-        }
+        newUser.addRole(roleRepository.findByName(signupRequest.roleToRoleName()));
         return userRepository.save(newUser);
     }
 }
