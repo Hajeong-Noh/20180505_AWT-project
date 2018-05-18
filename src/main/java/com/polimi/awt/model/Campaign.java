@@ -2,6 +2,7 @@ package com.polimi.awt.model;
 
 import java.time.LocalDateTime;
 
+@Entity
 public class Campaign {
 
     private Long id;

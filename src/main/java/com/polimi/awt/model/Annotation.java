@@ -3,6 +3,7 @@ package com.polimi.awt.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Entity
 public class Annotation {
 
     private Long id;

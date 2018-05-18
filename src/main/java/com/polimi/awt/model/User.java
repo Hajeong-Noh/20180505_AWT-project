@@ -1,19 +1,38 @@
 package com.polimi.awt.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
-    private String password;
-    private String emailAddress;
-    private Role role;
 
-    public User(Long id, String username, String password, String emailAddress, Role role) {
+    @NotBlank
+    private String username;
+
+    @NotBlank
+    private String password;
+
+    @NotBlank
+    private String emailAddress;
+
+    @ManyToMany
+    private List<Role> roles;
+
+    public User(Long id, String username, String password, String emailAddress, List<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.emailAddress = emailAddress;
-        this.role = role;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -48,11 +67,11 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-    public Role getRole() {
-        return role;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

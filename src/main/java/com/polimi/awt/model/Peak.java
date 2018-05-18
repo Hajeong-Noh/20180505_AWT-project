@@ -2,6 +2,7 @@ package com.polimi.awt.model;
 
 import java.util.List;
 
+@Entity
 public class Peak {
 
     private Long id;
