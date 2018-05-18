@@ -4,7 +4,7 @@ import com.polimi.awt.model.RoleName;
 
 import javax.validation.constraints.NotBlank;
 
-public class SignupRequest {
+public class SignUpRequest {
 
 
     @NotBlank
