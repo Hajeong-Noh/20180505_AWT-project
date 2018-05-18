@@ -1,8 +1,8 @@
 package com.polimi.awt.payload;
 
-import com.polimi.awt.model.Role;
+import com.polimi.awt.model.RoleName;
+
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 public class SignupRequest {
 
@@ -19,7 +19,12 @@ public class SignupRequest {
     @NotBlank
     private String role;
 
-
+    public RoleName roleToRoleName () {
+        if (this.role.equals("MANAGER")) {
+            return RoleName.MANAGER;
+        }
+        else return RoleName.WORKER;
+    }
 
     public String getUsername() {
         return username;
