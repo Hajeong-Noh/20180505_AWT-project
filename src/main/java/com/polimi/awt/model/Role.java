@@ -1,22 +1,22 @@
 package com.polimi.awt.model;
 
+import com.fasterxml.jackson.annotation.JacksonAnnotation;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
+@JsonIgnoreProperties(value = "id")
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private RoleName roleName;
+    private RoleName name;
 
-    public Role(String roleName) {
-        if (roleName.equals("WORKER")) {
-            this.roleName = RoleName.WORKER;
-        } else {
-            this.roleName = RoleName.MANAGER;
-        }
+    public Role() {
     }
 
     public Long getId() {
@@ -27,11 +27,11 @@ public class Role {
         this.id = id;
     }
 
-    public RoleName getRoleName() {
-        return roleName;
+    public RoleName getName() {
+        return name;
     }
 
-    public void setRoleName(RoleName roleName) {
-        this.roleName = roleName;
+    public void setName(RoleName name) {
+        this.name = name;
     }
 }
