@@ -7,10 +7,9 @@ import com.polimi.awt.payload.SignUpRequest;
 import com.polimi.awt.repository.RoleRepository;
 import com.polimi.awt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -27,13 +26,19 @@ public class UserController {
         User newUser;
 
         if (signUpRequest.hasRoleManager()) {
-            newUser = new Manager(signUpRequest.getUsername(), signUpRequest.getPassword(), signUpRequest.getEmailAddress());
-            newUser.addRole(roleRepository.findByName(signUpRequest.roleToRoleName()));
+            newUser = new Manager(signUpRequest.getUsername(), signUpRequest.getPassword(),
+                    signUpRequest.getEmailAddress(), roleRepository.findByName(signUpRequest.roleToRoleName()));
         }
         else {
-            newUser = new Worker(signUpRequest.getUsername(), signUpRequest.getPassword(), signUpRequest.getEmailAddress());
-            newUser.addRole(roleRepository.findByName(signUpRequest.roleToRoleName()));
+            newUser = new Worker(signUpRequest.getUsername(), signUpRequest.getPassword(),
+                    signUpRequest.getEmailAddress(), roleRepository.findByName(signUpRequest.roleToRoleName()));
         }
         return userRepository.save(newUser);
+    }
+
+    @GetMapping("/users/{userId}")
+    private Optional<User> getUser (@PathVariable Long userId) {
+
+        return userRepository.findById(userId);
     }
 }
