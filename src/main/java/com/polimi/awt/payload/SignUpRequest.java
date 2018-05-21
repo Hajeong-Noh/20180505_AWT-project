@@ -20,7 +20,7 @@ public class SignUpRequest {
     private String role;
 
     public RoleName roleToRoleName () {
-        if (this.role.equals("MANAGER")) {
+        if (hasRoleManager()) {
             return RoleName.MANAGER;
         }
         else return RoleName.WORKER;
