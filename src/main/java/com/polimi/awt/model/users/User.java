@@ -34,6 +34,16 @@ public abstract class User {
     @ManyToMany
     private Set<Role> roles = new HashSet<>();
 
+    public User() {
+    }
+
+    public User(String username, String password, String emailAddress, Role role) {
+        this.username = username;
+        this.password = password;
+        this.emailAddress = emailAddress;
+        this.roles.add(role);
+    }
+
     public User(String username, String password, String emailAddress) {
         this.username = username;
         this.password = password;

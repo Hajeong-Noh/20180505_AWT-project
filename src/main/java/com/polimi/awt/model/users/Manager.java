@@ -1,6 +1,7 @@
 package com.polimi.awt.model.users;
 
 import com.polimi.awt.model.Campaign;
+import com.polimi.awt.model.Role;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,9 +12,26 @@ import java.util.Set;
 @Entity
 public class Manager extends User {
 
+    public Manager() {
+    }
+
+    public Manager(String username, String password, String emailAddress, Role role) {
+        super(username, password, emailAddress, role);
+    }
+
     public Manager(String username, String password, String emailAddress) {
         super(username, password, emailAddress);
     }
+
     @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
     private Set <Campaign> managedCampaigns = new HashSet<>();
+
+    public Set<Campaign> getManagedCampaigns() {
+        return managedCampaigns;
+    }
+
+    public void setManagedCampaigns(Set<Campaign> managedCampaigns) {
+        this.managedCampaigns = managedCampaigns;
+    }
+
 }
