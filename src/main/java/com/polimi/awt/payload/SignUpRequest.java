@@ -25,6 +25,15 @@ public class SignUpRequest {
         }
         else return RoleName.WORKER;
     }
+    public boolean hasRoleManager (){
+        return (this.role.equals("MANAGER") ||
+                this.role.equals("Manager") || this.role.equals("manager"));
+    }
+
+    public boolean hasRoleWorker (){
+        return (this.role.equals("WORKER") ||
+                this.role.equals("Worker") || this.role.equals("worker"));
+    }
 
     public String getUsername() {
         return username;

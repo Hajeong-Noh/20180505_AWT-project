@@ -1,6 +1,7 @@
-package com.polimi.awt.model;
+package com.polimi.awt.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.polimi.awt.model.Role;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -10,9 +11,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = "id")
-public class User {
+public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
