@@ -2,7 +2,6 @@ package com.polimi.awt.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.polimi.awt.model.Role;
-import org.hibernate.annotations.NaturalId;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -21,7 +20,6 @@ public abstract class User {
     private Long id;
 
     @NotBlank
-    @NaturalId
     @Column(unique = true)
     private String username;
 
