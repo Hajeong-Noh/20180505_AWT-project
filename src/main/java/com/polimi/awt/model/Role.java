@@ -1,6 +1,5 @@
 package com.polimi.awt.model;
 
-import com.fasterxml.jackson.annotation.JacksonAnnotation;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -17,6 +16,10 @@ public class Role {
     private RoleName name;
 
     public Role() {
+    }
+
+    public Role(RoleName name) {
+        this.name = name;
     }
 
     public Long getId() {
