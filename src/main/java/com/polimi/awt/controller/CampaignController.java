@@ -1,6 +1,7 @@
 package com.polimi.awt.controller;
 
 import com.polimi.awt.model.Campaign;
+import com.polimi.awt.model.CampaignStatus;
 import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.payload.CreateCampaignRequest;
 import com.polimi.awt.repository.CampaignRepository;
@@ -27,5 +28,21 @@ public class CampaignController {
     private Campaign createCampaign(@RequestBody CreateCampaignRequest request) {
         Manager manager = (Manager) userRepository.findUserById(request.getId());
         return campaignRepository.save(manager.createCampaign(request.getName()));
+    }
+
+    @PatchMapping("/campaigns/{campaignId}")
+    private Campaign updateCampaignStatus (@PathVariable Long campaignId) {
+        Campaign campaign = campaignRepository.findCampaignById(campaignId);
+        if (campaign.getCampaignStatus().equals(CampaignStatus.CREATED)) {
+            campaign.setCampaignStatus(CampaignStatus.STARTED);
+        }
+        else if (campaign.getCampaignStatus().equals(CampaignStatus.STARTED)) {
+            campaign.setCampaignStatus(CampaignStatus.CLOSED);
+        }
+        else if (campaign.getCampaignStatus().equals(CampaignStatus.CLOSED)) {
+                throw new RuntimeException("The campaign is already closed.");
+            }
+        //TODO: set startDate and endDate when updated
+        return campaignRepository.save(campaign);
     }
 }
