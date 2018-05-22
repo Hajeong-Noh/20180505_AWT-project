@@ -1,6 +1,7 @@
 package com.polimi.awt.model.users;
 
 import com.polimi.awt.model.Campaign;
+import com.polimi.awt.model.CampaignStatus;
 import com.polimi.awt.model.Role;
 
 import javax.persistence.Entity;
@@ -32,6 +33,15 @@ public class Manager extends User {
 
     public void setManagedCampaigns(Set<Campaign> managedCampaigns) {
         this.managedCampaigns = managedCampaigns;
+    }
+
+    public Campaign createCampaign(String name){
+        Campaign newCampaign = new Campaign();
+        newCampaign.setName(name);
+        newCampaign.setCampaignStatus(CampaignStatus.CREATED);
+        newCampaign.setManager(this);
+        managedCampaigns.add(newCampaign);
+        return newCampaign;
     }
 
 }
