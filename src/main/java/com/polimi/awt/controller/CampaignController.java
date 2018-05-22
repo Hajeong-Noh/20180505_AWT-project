@@ -2,6 +2,7 @@ package com.polimi.awt.controller;
 
 import com.polimi.awt.model.Campaign;
 import com.polimi.awt.model.users.Manager;
+import com.polimi.awt.payload.CreateCampaignRequest;
 import com.polimi.awt.repository.CampaignRepository;
 import com.polimi.awt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class CampaignController {
     }
 
     @PostMapping("/campaigns")
-    private Campaign createCampaign(@RequestParam (value = "id") Long managerId, @RequestParam (value = "name") String name) {
-        Manager manager = (Manager) userRepository.findUserById(managerId);
-        return manager.createCampaign(name);
+    private Campaign createCampaign(@RequestBody CreateCampaignRequest request) {
+        Manager manager = (Manager) userRepository.findUserById(request.getId());
+        return manager.createCampaign(request.getName());
     }
 }
