@@ -26,6 +26,6 @@ public class CampaignController {
     @PostMapping("/campaigns")
     private Campaign createCampaign(@RequestBody CreateCampaignRequest request) {
         Manager manager = (Manager) userRepository.findUserById(request.getId());
-        return manager.createCampaign(request.getName());
+        return campaignRepository.save(manager.createCampaign(request.getName()));
     }
 }

@@ -21,7 +21,6 @@ public class Campaign {
     @Enumerated(EnumType.STRING)
     private CampaignStatus campaignStatus;
 
-    @NotBlank
     private Date startDate;
 
     private Date endDate;
