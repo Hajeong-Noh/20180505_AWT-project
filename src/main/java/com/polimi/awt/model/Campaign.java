@@ -1,7 +1,5 @@
 package com.polimi.awt.model;
 
-import com.polimi.awt.model.users.Manager;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -25,11 +23,9 @@ public class Campaign {
 
     private Date endDate;
 
-    @OneToMany(mappedBy = "campaign", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "campaign_id", referencedColumnName = "id")
     private Set <Peak> peakSet = new HashSet<>();
-
-    @ManyToOne
-    private Manager manager;
 
     public Campaign() {
     }
@@ -80,13 +76,5 @@ public class Campaign {
 
     public void setPeakSet(Set<Peak> peakSet) {
         this.peakSet = peakSet;
-    }
-
-    public Manager getManager() {
-        return manager;
-    }
-
-    public void setManager(Manager manager) {
-        this.manager = manager;
     }
 }

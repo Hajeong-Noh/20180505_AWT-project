@@ -1,6 +1,9 @@
 package com.polimi.awt.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class LocalizedPeakName {
@@ -10,8 +13,4 @@ public class LocalizedPeakName {
     private Long id;
     private String language;
     private String localizedName;
-    @ManyToOne
-    private Peak peak;
-    @ManyToOne
-    private Annotation annotation;
 }

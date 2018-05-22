@@ -6,6 +6,7 @@ import com.polimi.awt.model.Role;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +25,8 @@ public class Manager extends User {
         super(username, password, emailAddress);
     }
 
-    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Set <Campaign> managedCampaigns = new HashSet<>();
 
     public Set<Campaign> getManagedCampaigns() {
@@ -39,7 +41,6 @@ public class Manager extends User {
         Campaign newCampaign = new Campaign();
         newCampaign.setName(name);
         newCampaign.setCampaignStatus(CampaignStatus.CREATED);
-        newCampaign.setManager(this);
         managedCampaigns.add(newCampaign);
         return newCampaign;
     }

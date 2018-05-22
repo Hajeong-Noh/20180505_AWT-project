@@ -15,12 +15,13 @@ public class Peak {
     private double elevation;
     private String name;
 
-    @OneToMany(mappedBy = "peak", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "peak_id", referencedColumnName = "id")
     private Set<LocalizedPeakName> localizedPeakNames = new HashSet<>();
-    @OneToMany(mappedBy = "peak", fetch = FetchType.EAGER)
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "peak_id", referencedColumnName = "id")
     private Set <Annotation> annotations = new HashSet<>();
     private boolean toBeAnnotated;
     private String dataProvenance;
-    @ManyToOne
-    private Campaign campaign;
 }

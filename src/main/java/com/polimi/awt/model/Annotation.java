@@ -10,13 +10,12 @@ public class Annotation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Peak peak;
     private Date creationDate;
     private boolean isValid;
     private double elevation;
     private String name;
-    @OneToMany(mappedBy = "annotation", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "annotation_id", referencedColumnName = "id")
     private Set<LocalizedPeakName> localizedPeakNames;
     private boolean isAcceptedByManager;
 
