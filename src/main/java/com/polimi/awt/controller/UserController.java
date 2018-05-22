@@ -4,6 +4,7 @@ import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.User;
 import com.polimi.awt.model.users.Worker;
 import com.polimi.awt.payload.SignUpRequest;
+import com.polimi.awt.payload.UpdateUserRequest;
 import com.polimi.awt.repository.RoleRepository;
 import com.polimi.awt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,4 +42,15 @@ public class UserController {
 
         return userRepository.findById(userId);
     }
+
+    @PutMapping("/users/{userId}")
+    private UpdateUserRequest updateUsername (@PathVariable Long userId, @RequestBody UpdateUserRequest update) {
+        User user = userRepository.findUserById(userId);
+        user.setUsername(update.getUsername());
+        user.setEmailAddress(update.getEmail());
+        user.setPassword(update.getPassword());
+        userRepository.save(user);
+        return update;
+    }
+
 }
