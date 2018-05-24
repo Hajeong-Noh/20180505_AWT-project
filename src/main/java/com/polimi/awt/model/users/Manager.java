@@ -44,5 +44,4 @@ public class Manager extends User {
         managedCampaigns.add(newCampaign);
         return newCampaign;
     }
-
 }

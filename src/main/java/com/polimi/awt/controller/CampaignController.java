@@ -9,6 +9,8 @@ import com.polimi.awt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @RestController
@@ -24,6 +26,11 @@ public class CampaignController {
         return campaignRepository.findAll();
     }
 
+    @GetMapping("/campaigns/{campaignId}")
+    private Campaign getCampaignById (@PathVariable Long campaignId) {
+       return campaignRepository.findCampaignById(campaignId);
+    }
+
     @PostMapping("/campaigns")
     private Campaign createCampaign(@RequestBody CreateCampaignRequest request) {
         Manager manager = (Manager) userRepository.findUserById(request.getId());
@@ -35,14 +42,15 @@ public class CampaignController {
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
         if (campaign.getCampaignStatus().equals(CampaignStatus.CREATED)) {
             campaign.setCampaignStatus(CampaignStatus.STARTED);
+            campaign.setStartDate(LocalDateTime.now(ZoneId.of("Europe/Rome")));
         }
         else if (campaign.getCampaignStatus().equals(CampaignStatus.STARTED)) {
             campaign.setCampaignStatus(CampaignStatus.CLOSED);
+            campaign.setEndDate(LocalDateTime.now(ZoneId.of("Europe/Rome")));
         }
         else if (campaign.getCampaignStatus().equals(CampaignStatus.CLOSED)) {
                 throw new RuntimeException("The campaign is already closed.");
             }
-        //TODO: set startDate and endDate when updated
         return campaignRepository.save(campaign);
     }
 }

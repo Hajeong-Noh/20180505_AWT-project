@@ -2,7 +2,7 @@ package com.polimi.awt.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,9 +19,9 @@ public class Campaign {
     @Enumerated(EnumType.STRING)
     private CampaignStatus campaignStatus;
 
-    private Date startDate;
+    private LocalDateTime startDate;
 
-    private Date endDate;
+    private LocalDateTime endDate;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "campaign_id", referencedColumnName = "id")
@@ -54,19 +54,19 @@ public class Campaign {
         this.campaignStatus = campaignStatus;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
