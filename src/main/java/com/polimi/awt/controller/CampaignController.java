@@ -30,14 +30,14 @@ public class CampaignController {
 
     @PostMapping("/campaigns")
     private Campaign createCampaign(@RequestBody CampaignRequest request) {
-        Manager manager = (Manager) userRepository.findUserById(request.getId());
+        Manager manager = (Manager) userRepository.findUserById(request.getUserId());
         return campaignRepository.save(manager.createCampaign(request.getName()));
     }
 
     @PatchMapping("/campaigns/{campaignId}")
     private Campaign updateCampaignStatus (@PathVariable Long campaignId, @RequestBody CampaignRequest request) {
-        Manager manager = (Manager) userRepository.findUserById(request.getId());
+        Manager manager = (Manager) userRepository.findUserById(request.getUserId());
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
-        return campaignRepository.save(manager.udpateCampaignStatus(campaign));
+        return campaignRepository.save(manager.updateCampaignStatus(campaign));
     }
 }
