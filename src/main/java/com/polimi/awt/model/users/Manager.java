@@ -47,7 +47,7 @@ public class Manager extends User {
         return newCampaign;
     }
 
-    public Campaign udpateCampaignStatus (Campaign campaign) {
+    public Campaign updateCampaignStatus(Campaign campaign) {
         assert (this.getManagedCampaigns().contains(campaign));
 
         if (campaign.getCampaignStatus().equals(CampaignStatus.CREATED)) {
