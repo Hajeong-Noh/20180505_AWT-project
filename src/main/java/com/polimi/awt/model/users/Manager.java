@@ -5,13 +5,8 @@ import com.polimi.awt.model.CampaignStatus;
 import com.polimi.awt.model.Role;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Manager extends User {
@@ -27,28 +22,15 @@ public class Manager extends User {
         super(username, password, emailAddress);
     }
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Set <Campaign> managedCampaigns = new HashSet<>();
-
-    public Set<Campaign> getManagedCampaigns() {
-        return managedCampaigns;
-    }
-
-    public void setManagedCampaigns(Set<Campaign> managedCampaigns) {
-        this.managedCampaigns = managedCampaigns;
-    }
-
     public Campaign createCampaign(String name){
         Campaign newCampaign = new Campaign();
         newCampaign.setName(name);
         newCampaign.setCampaignStatus(CampaignStatus.CREATED);
-        managedCampaigns.add(newCampaign);
+        newCampaign.setManager(this);
         return newCampaign;
     }
 
     public Campaign updateCampaignStatus(Campaign campaign) {
-        assert (this.getManagedCampaigns().contains(campaign));
 
         if (campaign.getCampaignStatus().equals(CampaignStatus.CREATED)) {
             campaign.setCampaignStatus(CampaignStatus.STARTED);
