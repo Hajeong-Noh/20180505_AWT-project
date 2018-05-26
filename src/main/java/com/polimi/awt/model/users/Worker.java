@@ -3,6 +3,7 @@ package com.polimi.awt.model.users;
 import com.polimi.awt.model.Campaign;
 import com.polimi.awt.model.Role;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import java.util.HashSet;
@@ -24,6 +25,8 @@ public class Worker extends User {
         super(username, password, emailAddress);
     }
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private Set <Campaign> enrolledCampaigns = new HashSet<>();
+
+    public Campaign enrollInCampaign(Campaign campaign){ enrolledCampaigns.add(campaign); return campaign; }
 }

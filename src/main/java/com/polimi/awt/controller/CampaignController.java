@@ -2,6 +2,7 @@ package com.polimi.awt.controller;
 
 import com.polimi.awt.model.Campaign;
 import com.polimi.awt.model.users.Manager;
+import com.polimi.awt.model.users.Worker;
 import com.polimi.awt.payload.CampaignRequest;
 import com.polimi.awt.repository.CampaignRepository;
 import com.polimi.awt.repository.UserRepository;
@@ -30,14 +31,21 @@ public class CampaignController {
 
     @PostMapping("/campaigns")
     private Campaign createCampaign(@RequestBody CampaignRequest request) {
-        Manager manager = (Manager) userRepository.findUserById(request.getId());
+        Manager manager = (Manager) userRepository.findUserById(request.getManagerId());
         return campaignRepository.save(manager.createCampaign(request.getName()));
     }
 
     @PatchMapping("/campaigns/{campaignId}")
     private Campaign updateCampaignStatus (@PathVariable Long campaignId, @RequestBody CampaignRequest request) {
-        Manager manager = (Manager) userRepository.findUserById(request.getId());
+        Manager manager = (Manager) userRepository.findUserById(request.getManagerId());
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
         return campaignRepository.save(manager.udpateCampaignStatus(campaign));
+    }
+
+    @PostMapping("/campaigns/{campaignId}")
+    private void enrollInCampaign(@PathVariable Long campaignId, @RequestBody CampaignRequest request) {
+        Worker worker = (Worker) userRepository.findUserById(request.getWorkerId());
+        Campaign campaign = campaignRepository.findCampaignById(campaignId);
+        campaignRepository.save(worker.enrollInCampaign(campaign));
     }
 }

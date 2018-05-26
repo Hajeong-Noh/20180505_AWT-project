@@ -48,8 +48,6 @@ public class Manager extends User {
     }
 
     public Campaign udpateCampaignStatus (Campaign campaign) {
-        assert (this.getManagedCampaigns().contains(campaign));
-
         if (campaign.getCampaignStatus().equals(CampaignStatus.CREATED)) {
             campaign.setCampaignStatus(CampaignStatus.STARTED);
             campaign.setStartDate(LocalDateTime.now(ZoneId.of("Europe/Rome")));
