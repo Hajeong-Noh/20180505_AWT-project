@@ -31,7 +31,7 @@ public class Manager extends User {
         return newCampaign;
     }
 
-    public Campaign udpateCampaignStatus (Campaign campaign) {
+    public Campaign updateCampaignStatus(Campaign campaign) {
         if (campaign.getCampaignStatus().equals(CampaignStatus.CREATED)) {
             campaign.setCampaignStatus(CampaignStatus.STARTED);
             campaign.setStartDate(LocalDateTime.now(ZoneId.of("Europe/Rome")));
@@ -46,7 +46,7 @@ public class Manager extends User {
         return campaign;
     }
 
-    public Annotation udpateAnnotationStatus (Annotation annotation, Boolean isAcceptedByManager) {
+    public Annotation updateAnnotationStatus(Annotation annotation, Boolean isAcceptedByManager) {
         annotation.setAcceptedByManager(isAcceptedByManager);
         return annotation;
     }

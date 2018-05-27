@@ -40,6 +40,6 @@ public class AnnotationController {
     private Annotation updateAnnotationStatus (@PathVariable Long annotationId, @RequestBody AnnotationRequest request) {
         Manager manager = (Manager) userRepository.findUserById(request.getManagerId());
         Annotation annotation = annotationRepository.findAnnotationById(annotationId);
-        return annotationRepository.save(manager.udpateAnnotationStatus(annotation, request.isAcceptedByManager()));
+        return annotationRepository.save(manager.updateAnnotationStatus(annotation, request.isAcceptedByManager()));
     }
 }

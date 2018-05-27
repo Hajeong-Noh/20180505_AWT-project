@@ -39,7 +39,7 @@ public class CampaignController {
     private Campaign updateCampaignStatus (@PathVariable Long campaignId, @RequestBody CampaignRequest request) {
         Manager manager = (Manager) userRepository.findUserById(request.getManagerId());
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
-        return campaignRepository.save(manager.udpateCampaignStatus(campaign));
+        return campaignRepository.save(manager.updateCampaignStatus(campaign));
     }
 
     @PostMapping("/campaigns/{campaignId}")
