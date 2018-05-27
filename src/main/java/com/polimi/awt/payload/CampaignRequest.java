@@ -1,7 +1,6 @@
 package com.polimi.awt.payload;
 
 public class CampaignRequest {
-
     private Long id;
 
     public Long getId() {

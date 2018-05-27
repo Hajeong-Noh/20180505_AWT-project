@@ -1,12 +1,15 @@
 package com.polimi.awt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.polimi.awt.model.users.Manager;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@JsonIgnoreProperties("manager")
 public class Campaign {
 
     @Id
@@ -23,9 +26,8 @@ public class Campaign {
 
     private LocalDateTime endDate;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "campaign_id", referencedColumnName = "id")
-    private Set <Peak> peakSet = new HashSet<>();
+    @ManyToOne
+    private Manager manager;
 
     public Campaign() {
     }
@@ -70,11 +72,19 @@ public class Campaign {
         this.endDate = endDate;
     }
 
-    public Set<Peak> getPeakSet() {
-        return peakSet;
+    public Manager getManager() {
+        return manager;
     }
 
-    public void setPeakSet(Set<Peak> peakSet) {
-        this.peakSet = peakSet;
+    public void setManager(Manager manager) {
+        this.manager = manager;
+    }
+
+    public void addPeaks(Set <Peak> peaks, boolean isToBeAnnotated) {
+
+        for (Peak peak : peaks) {
+            peak.setToBeAnnotated(isToBeAnnotated);
+            peak.setCampaign(this);
+        }
     }
 }
