@@ -1,5 +1,6 @@
 package com.polimi.awt.model.users;
 
+import com.polimi.awt.model.Annotation;
 import com.polimi.awt.model.Campaign;
 import com.polimi.awt.model.CampaignStatus;
 import com.polimi.awt.model.Role;
@@ -43,6 +44,11 @@ public class Manager extends User {
                 throw new RuntimeException("The campaign is already closed.");
             }
         return campaign;
+    }
+
+    public Annotation udpateAnnotationStatus (Annotation annotation, Boolean isAcceptedByManager) {
+        annotation.setAcceptedByManager(isAcceptedByManager);
+        return annotation;
     }
 
 }
