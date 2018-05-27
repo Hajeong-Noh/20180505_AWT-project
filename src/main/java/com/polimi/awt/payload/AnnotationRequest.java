@@ -9,7 +9,7 @@ public class AnnotationRequest {
 
     private Long workerId;
 
-    private Boolean isValid;
+    private boolean isValid;
 
     private Double elevation;
 

@@ -26,7 +26,7 @@ public class Peak {
     @JsonProperty(value = "localized_names")
     private List<LocalizedPeakName> localizedNames = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "peak_id", referencedColumnName = "id")
     private Set <Annotation> annotations = new HashSet<>();
     private boolean toBeAnnotated;
@@ -102,7 +102,7 @@ public class Peak {
     public void inverseToBeAnnotated () {
         //TODO: add exception
         if (this.campaign.getCampaignStatus() != CampaignStatus.CREATED) {
-            throw new RuntimeException("The property can only be changed if the campaign us in the CREATED status.");
+            throw new RuntimeException("The property can only be changed if the campaign is in the CREATED status.");
         }
         this.toBeAnnotated = !this.toBeAnnotated;
     }

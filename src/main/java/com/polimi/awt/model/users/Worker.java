@@ -32,7 +32,7 @@ public class Worker extends User {
 
     public Campaign enrollInCampaign(Campaign campaign){ enrolledCampaigns.add(campaign); return campaign; }
 
-    public Annotation createAnnotation(Boolean isValid, Double elevation, String name, Set<LocalizedPeakName> localizedPeakNames){
+    public Annotation createAnnotation(boolean isValid, Double elevation, String name, Set<LocalizedPeakName> localizedPeakNames){
         Annotation newAnnotation = new Annotation();
         newAnnotation.setValid(isValid);
         newAnnotation.setElevation(elevation);

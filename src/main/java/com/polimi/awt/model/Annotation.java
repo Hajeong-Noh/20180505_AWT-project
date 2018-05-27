@@ -13,14 +13,17 @@ public class Annotation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @Column(nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date creationDate;
 
-    private boolean isValid = false;
+    private boolean isValid;
     private double elevation;
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "annotation_id", referencedColumnName = "id")
     private Set<LocalizedPeakName> localizedPeakNames;
 
