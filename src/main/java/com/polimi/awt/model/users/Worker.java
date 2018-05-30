@@ -1,13 +1,12 @@
 package com.polimi.awt.model.users;
 
-import com.polimi.awt.model.Annotation;
-import com.polimi.awt.model.Campaign;
-import com.polimi.awt.model.LocalizedPeakName;
-import com.polimi.awt.model.Role;
+import com.polimi.awt.model.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,10 +31,13 @@ public class Worker extends User {
 
     public Campaign enrollInCampaign(Campaign campaign){ enrolledCampaigns.add(campaign); return campaign; }
 
-    public Annotation createAnnotation(boolean isValid, Double elevation, String name, Set<LocalizedPeakName> localizedPeakNames){
+    public Annotation createAnnotation(Peak peak, boolean isValid, Double elevation, String name, Set<LocalizedPeakName> localizedPeakNames){
         Annotation newAnnotation = new Annotation();
+        newAnnotation.setCreationDateTime(LocalDateTime.now(ZoneId.of("Europe/Rome")));
+        newAnnotation.setPeak(peak);
         newAnnotation.setValid(isValid);
         newAnnotation.setElevation(elevation);
+        newAnnotation.setName(name);
         newAnnotation.setLocalizedPeakNames(localizedPeakNames);
         return newAnnotation;
     }

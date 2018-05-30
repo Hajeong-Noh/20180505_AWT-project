@@ -1,10 +1,12 @@
 package com.polimi.awt.controller;
 
 import com.polimi.awt.model.Annotation;
+import com.polimi.awt.model.Peak;
 import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.Worker;
 import com.polimi.awt.payload.AnnotationRequest;
 import com.polimi.awt.repository.AnnotationRepository;
+import com.polimi.awt.repository.PeakRepository;
 import com.polimi.awt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.util.Set;
 public class AnnotationController {
     @Autowired
     private AnnotationRepository annotationRepository;
+    @Autowired
+    private PeakRepository peakRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -30,9 +34,10 @@ public class AnnotationController {
     }
 
     @PostMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations")
-    private Annotation createAnnotation (@RequestBody AnnotationRequest request){
+    private Annotation createAnnotation (@PathVariable Long peakId, @RequestBody AnnotationRequest request){
         Worker worker = (Worker) userRepository.findUserById(request.getWorkerId());
-        return annotationRepository.save(worker.createAnnotation(request.getValid(), request.getElevation(),
+        Peak peak = peakRepository.findPeakById(peakId);
+        return annotationRepository.save(worker.createAnnotation(peak, request.getValid(), request.getElevation(),
                 request.getName(), request.getLocalizedPeakNames()));
     }
 
