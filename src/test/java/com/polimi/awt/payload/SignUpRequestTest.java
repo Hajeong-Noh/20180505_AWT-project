@@ -12,14 +12,14 @@ public class SignUpRequestTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         managerSignUp = new SignUpRequest();
-        managerSignUp.setEmailAddress("manager@test.com");
+        managerSignUp.setEmail("manager@test.com");
         managerSignUp.setPassword("pa55w0rd_m");
         managerSignUp.setRole("MANAGER");
 
         workerSignUp = new SignUpRequest();
-        workerSignUp.setEmailAddress("worker@test.com");
+        workerSignUp.setEmail("worker@test.com");
         workerSignUp.setPassword("pa55w0rd_w");
         workerSignUp.setRole("WORKER");
     }
@@ -29,7 +29,7 @@ public class SignUpRequestTest {
 
 
         Assert.assertNotNull(managerSignUp);
-        Assert.assertEquals("manager@test.com", managerSignUp.getEmailAddress());
+        Assert.assertEquals("manager@test.com", managerSignUp.getEmail());
         Assert.assertEquals("pa55w0rd_m", managerSignUp.getPassword());
         Assert.assertEquals("MANAGER", managerSignUp.getRole());
     }

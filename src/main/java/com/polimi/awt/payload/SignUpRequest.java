@@ -14,7 +14,7 @@ public class SignUpRequest {
     private String password;
 
     @NotBlank
-    private String emailAddress;
+    private String email;
 
     @NotBlank
     private String role;
@@ -51,12 +51,12 @@ public class SignUpRequest {
         this.password = password;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getRole() {
