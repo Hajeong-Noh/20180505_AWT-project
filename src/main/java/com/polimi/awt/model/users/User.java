@@ -2,6 +2,7 @@ package com.polimi.awt.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.polimi.awt.model.Role;
+import com.polimi.awt.model.RoleName;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -90,5 +91,14 @@ public abstract class User {
 
     public void addRole (Role role) {
         roles.add(role);
+    }
+
+    public boolean rolesContainsRoleName (RoleName roleName) {
+        for (Role currentRole : this.roles) {
+            if (currentRole.getName().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
