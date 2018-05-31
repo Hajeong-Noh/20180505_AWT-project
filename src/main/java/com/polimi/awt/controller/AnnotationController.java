@@ -8,7 +8,12 @@ import com.polimi.awt.payload.AnnotationRequest;
 import com.polimi.awt.repository.AnnotationRepository;
 import com.polimi.awt.repository.PeakRepository;
 import com.polimi.awt.repository.UserRepository;
+import com.polimi.awt.security.CurrentUser;
+import com.polimi.awt.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -42,9 +47,20 @@ public class AnnotationController {
     }
 
     @PatchMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations/{annotationId}")
-    private Annotation updateAnnotationStatus (@PathVariable Long annotationId, @RequestBody AnnotationRequest request) {
-        Manager manager = (Manager) userRepository.findUserById(request.getManagerId());
+    @PreAuthorize("hasAuthority('MANAGER')")
+    public ResponseEntity updateAnnotationStatus(@CurrentUser UserPrincipal currentUser, @PathVariable Long annotationId,
+                                                 @RequestBody AnnotationRequest request) {
+        Manager manager = (Manager) userRepository.findUserById(currentUser.getId());
         Annotation annotation = annotationRepository.findAnnotationById(annotationId);
-        return annotationRepository.save(manager.updateAnnotationStatus(annotation, request.isAcceptedByManager()));
+        if (annotation.getPeak().getCampaign().getManager().getId().
+                equals(currentUser.getId())) {
+
+            manager.updateAnnotationStatus(annotation, request.isAcceptedByManager());
+            annotationRepository.save(manager.updateAnnotationStatus(annotation, request.isAcceptedByManager()));
+            return ResponseEntity.status(HttpStatus.OK).body("Successful");
+        }
+        else
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).
+                    body("You are not authorized to accept or reject this annotation.");
     }
 }

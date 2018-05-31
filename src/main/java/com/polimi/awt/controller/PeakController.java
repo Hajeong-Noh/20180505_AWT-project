@@ -74,5 +74,4 @@ public class PeakController {
                     body("You are not authorized to edit this peak.");
     }
 
-
 }
