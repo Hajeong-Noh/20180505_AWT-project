@@ -1,13 +1,12 @@
 package com.polimi.awt.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
-@JsonIgnoreProperties("peak")
 public class Annotation {
 
     @Id
@@ -16,7 +15,9 @@ public class Annotation {
 
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime creationDateTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private Date creationDate;
 
     private boolean isValid;
     private double elevation;
@@ -39,12 +40,12 @@ public class Annotation {
         this.id = id;
     }
 
-    public LocalDateTime getCreationDateTime() {
-        return creationDateTime;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreationDateTime(LocalDateTime creationDateTime) {
-        this.creationDateTime = creationDateTime;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public boolean isValid() {

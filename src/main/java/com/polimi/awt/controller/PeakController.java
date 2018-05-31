@@ -1,6 +1,7 @@
 package com.polimi.awt.controller;
 
 import com.polimi.awt.model.Campaign;
+import com.polimi.awt.model.CampaignStatus;
 import com.polimi.awt.model.Peak;
 import com.polimi.awt.repository.CampaignRepository;
 import com.polimi.awt.repository.PeakRepository;
@@ -40,6 +41,11 @@ public class PeakController {
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
         if (campaign.getManager().getId().equals(currentUser.getId())) {
 
+            if (!campaign.getCampaignStatus().equals(CampaignStatus.CREATED)) {
+                return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).
+                        body("You cannot upload peaks for this campaign anymore.");
+            }
+
             campaign.addPeaks(peaks, annotate);
             peakRepository.saveAll(peaks);
             return ResponseEntity.status(HttpStatus.OK).body("File uploaded successfully");
@@ -66,8 +72,6 @@ public class PeakController {
         else
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).
                     body("You are not authorized to edit this peak.");
-
-
     }
 
 

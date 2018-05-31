@@ -1,6 +1,7 @@
 package com.polimi.awt.controller;
 
 import com.polimi.awt.model.Campaign;
+import com.polimi.awt.model.CampaignStatus;
 import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.User;
 import com.polimi.awt.model.users.Worker;
@@ -10,6 +11,8 @@ import com.polimi.awt.repository.UserRepository;
 import com.polimi.awt.security.CurrentUser;
 import com.polimi.awt.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,19 +34,17 @@ public class CampaignController {
     @GetMapping("/campaigns")
     public List<Campaign> getCampaigns(@CurrentUser UserPrincipal currentUser) {
         User user = userRepository.findUserById(currentUser.getId());
+        //Return all owned campaigns if user is a Manager
         if (user.rolesContainsRoleName(MANAGER)) {
             return campaignRepository.findAllByManager_Id(user.getId());
         }
-        //TODO: return enrolled Campaigns if user is a worker
-        return campaignRepository.findAll();
+        //Return all campaigns with status STARTED if user is a Worker
+        return campaignRepository.findCampaignByCampaignStatus(CampaignStatus.STARTED);
     }
 
     @GetMapping("/campaigns/{campaignId}")
-    public Campaign getCampaignById (@PathVariable Long campaignId, @CurrentUser UserPrincipal currentUser) {
-        Campaign campaign = campaignRepository.findCampaignById(campaignId);
-        if (campaign.getManager().getId().equals(currentUser.getId())) {
+    public Campaign getCampaignById(@PathVariable Long campaignId, @CurrentUser UserPrincipal currentUser) {
 
-        }
         return campaignRepository.findCampaignById(campaignId);
     }
 
@@ -56,17 +57,29 @@ public class CampaignController {
 
     @PatchMapping("/campaigns/{campaignId}")
     @PreAuthorize("hasAuthority('MANAGER')")
-    public Campaign updateCampaignStatus (@PathVariable Long campaignId, @RequestBody CampaignRequest request) {
-        Manager manager = (Manager) userRepository.findUserById(request.getManagerId());
+    public ResponseEntity updateCampaignStatus(@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
+        Manager manager = (Manager) userRepository.findUserById(currentUser.getId());
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
-        return campaignRepository.save(manager.updateCampaignStatus(campaign));
+        if (campaign.getManager().equals(manager)) {
+            campaignRepository.save(manager.updateCampaignStatus(campaign));
+            return ResponseEntity.status(HttpStatus.OK).body("Updated status to " + campaign.getCampaignStatus());
+        }
+        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).
+                body("You are not authorized to change the status of this campaign");
     }
 
     @PostMapping("/campaigns/{campaignId}")
     @PreAuthorize("hasAuthority('WORKER')")
-    public void enrollInCampaign(@PathVariable Long campaignId, @RequestBody CampaignRequest request) {
-        Worker worker = (Worker) userRepository.findUserById(request.getWorkerId());
+    public ResponseEntity enrollInCampaign(@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
+
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
+        if (!campaign.getCampaignStatus().equals(CampaignStatus.STARTED)) {
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).
+                    body("You cannot enroll in this campaign.");
+        }
+        Worker worker = (Worker) userRepository.findUserById(currentUser.getId());
         campaignRepository.save(worker.enrollInCampaign(campaign));
+        return ResponseEntity.status(HttpStatus.OK).
+                body("Enrolled successfully in Campaign " + campaign.getName());
     }
 }
