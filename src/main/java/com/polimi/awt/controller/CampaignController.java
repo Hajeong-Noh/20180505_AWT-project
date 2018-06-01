@@ -38,8 +38,10 @@ public class CampaignController {
         if (user.rolesContainsRoleName(MANAGER)) {
             return campaignRepository.findAllByManager_Id(user.getId());
         }
-        //Return all campaigns with status STARTED if user is a Worker
-        return campaignRepository.findCampaignByCampaignStatus(CampaignStatus.STARTED);
+        /*//Return all campaigns with status STARTED if user is a Worker
+        return campaignRepository.findCampaignByCampaignStatus(CampaignStatus.STARTED);*/
+
+        return campaignRepository.findEnrolledCampaigns(currentUser.getId());
     }
 
     @GetMapping("/campaigns/{campaignId}")
