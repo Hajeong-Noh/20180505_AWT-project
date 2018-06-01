@@ -39,11 +39,20 @@ public class AnnotationController {
     }
 
     @PostMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations")
-    private Annotation createAnnotation (@PathVariable Long peakId, @RequestBody AnnotationRequest request){
-        Worker worker = (Worker) userRepository.findUserById(request.getWorkerId());
+    @PreAuthorize("hasAuthority('WORKER')")
+    public ResponseEntity createAnnotation (@CurrentUser UserPrincipal currentUser,
+                                         @PathVariable Long peakId, @RequestBody AnnotationRequest request){
+        Worker worker = (Worker) userRepository.findUserById(currentUser.getId());
         Peak peak = peakRepository.findPeakById(peakId);
-        return annotationRepository.save(worker.createAnnotation(peak, request.getValid(), request.getElevation(),
-                request.getName(), request.getLocalizedPeakNames()));
+        if (annotationRepository.findAnnotationByPeakAndWorkerId(peak, currentUser.getId()) == null) {
+            annotationRepository.save(worker.createAnnotation(peak, request.getValid(), request.getElevation(),
+                    request.getName(), request.getLocalizedPeakNames(), currentUser.getId()));
+            return ResponseEntity.status(HttpStatus.OK).body("Successful");
+        }
+        else
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).
+                    body("You can add maximum one annotation for a peak.");
+
     }
 
     @PatchMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations/{annotationId}")

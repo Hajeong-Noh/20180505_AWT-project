@@ -31,7 +31,8 @@ public class Worker extends User {
 
     public Campaign enrollInCampaign(Campaign campaign){ enrolledCampaigns.add(campaign); return campaign; }
 
-    public Annotation createAnnotation(Peak peak, boolean isValid, Double elevation, String name, Set<LocalizedPeakName> localizedPeakNames){
+    public Annotation createAnnotation(Peak peak, boolean isValid, Double elevation, String name,
+                                       Set<LocalizedPeakName> localizedPeakNames, Long workerId){
         Annotation newAnnotation = new Annotation();
         newAnnotation.setCreationDateTime(LocalDateTime.now(ZoneId.of("Europe/Rome")));
         newAnnotation.setPeak(peak);
@@ -39,6 +40,7 @@ public class Worker extends User {
         newAnnotation.setElevation(elevation);
         newAnnotation.setName(name);
         newAnnotation.setLocalizedPeakNames(localizedPeakNames);
+        newAnnotation.setWorkerId(workerId);
         return newAnnotation;
     }
 }

@@ -1,6 +1,7 @@
 package com.polimi.awt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -30,6 +31,9 @@ public class Annotation {
 
     @ManyToOne
     private Peak peak;
+
+    @CreatedBy
+    private Long workerId;
 
     public Long getId() {
         return id;
@@ -95,4 +99,11 @@ public class Annotation {
         this.peak = peak;
     }
 
+    public Long getWorkerId() {
+        return workerId;
+    }
+
+    public void setWorkerId(Long workerId) {
+        this.workerId = workerId;
+    }
 }
