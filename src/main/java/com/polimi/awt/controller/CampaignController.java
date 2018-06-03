@@ -1,12 +1,15 @@
 package com.polimi.awt.controller;
 
 import com.polimi.awt.model.Campaign;
+import com.polimi.awt.model.CampaignStatistics;
 import com.polimi.awt.model.CampaignStatus;
 import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.User;
 import com.polimi.awt.model.users.Worker;
 import com.polimi.awt.payload.CampaignRequest;
+import com.polimi.awt.repository.AnnotationRepository;
 import com.polimi.awt.repository.CampaignRepository;
+import com.polimi.awt.repository.PeakRepository;
 import com.polimi.awt.repository.UserRepository;
 import com.polimi.awt.security.CurrentUser;
 import com.polimi.awt.security.UserPrincipal;
@@ -29,6 +32,12 @@ public class CampaignController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AnnotationRepository annotationRepository;
+
+    @Autowired
+    private PeakRepository peakRepository;
 
 
     @GetMapping("/campaigns")
@@ -84,4 +93,23 @@ public class CampaignController {
         return ResponseEntity.status(HttpStatus.OK).
                 body("Enrolled successfully in Campaign " + campaign.getName());
     }
+
+    @GetMapping("campaigns/{campaignId}/statistics")
+    @PreAuthorize("hasAuthority('MANAGER')")
+    public CampaignStatistics getCampaignStatistics (@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
+
+//        Campaign campaign = campaignRepository.findCampaignById(campaignId);
+
+//        if (!campaign.getManager().ownsCampaign(campaign)) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).
+//                    body("You are not authorized to access this resource.");
+//        }
+        int totalNumberOfPeaks = peakRepository.countPeaksByCampaignId(campaignId);
+        int numberOfAnnotatedPeaks = annotationRepository.countPeaksInAnnotatedState(campaignId);
+        int numberOfStartedPeaks = totalNumberOfPeaks - numberOfAnnotatedPeaks;
+
+        return new CampaignStatistics(numberOfStartedPeaks, numberOfAnnotatedPeaks,
+                annotationRepository.countPeaksWithRejectedAnnotations(campaignId), annotationRepository.countNumberOfConflictsByCampaignId(campaignId));
+    }
+
 }
