@@ -2,11 +2,13 @@ package com.polimi.awt.controller;
 
 
 
+import com.polimi.awt.exception.PreconditionFailedException;
 import com.polimi.awt.model.RoleName;
 import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.User;
 import com.polimi.awt.model.users.Worker;
-import com.polimi.awt.payload.ApiResponse;
+import com.polimi.awt.payload.HttpResponseStatus.ApiResponse;
+import com.polimi.awt.payload.HttpResponseStatus.CreatedResponse;
 import com.polimi.awt.payload.JwtAuthenticationResponse;
 import com.polimi.awt.payload.LoginRequest;
 import com.polimi.awt.payload.SignUpRequest;
@@ -14,7 +16,6 @@ import com.polimi.awt.repository.RoleRepository;
 import com.polimi.awt.repository.UserRepository;
 import com.polimi.awt.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -64,10 +65,10 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ApiResponse registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).
-                    body(new ApiResponse(false, "Username already taken!"));
+            throw new PreconditionFailedException("Username already exists.");
         }
 
         // Instantiating user instance depending on role
@@ -83,7 +84,6 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).
-                body(new ApiResponse(true, "User registered successfully"));
+        return new CreatedResponse("User registered successfully");
     }
 }

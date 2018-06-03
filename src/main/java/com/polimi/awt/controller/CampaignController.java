@@ -1,5 +1,7 @@
 package com.polimi.awt.controller;
 
+import com.polimi.awt.exception.PreconditionFailedException;
+import com.polimi.awt.exception.UnauthorizedException;
 import com.polimi.awt.model.Campaign;
 import com.polimi.awt.model.CampaignStatistics;
 import com.polimi.awt.model.CampaignStatus;
@@ -7,6 +9,8 @@ import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.User;
 import com.polimi.awt.model.users.Worker;
 import com.polimi.awt.payload.CampaignRequest;
+import com.polimi.awt.payload.HttpResponseStatus.ApiResponse;
+import com.polimi.awt.payload.HttpResponseStatus.OkResponse;
 import com.polimi.awt.repository.AnnotationRepository;
 import com.polimi.awt.repository.CampaignRepository;
 import com.polimi.awt.repository.PeakRepository;
@@ -14,8 +18,6 @@ import com.polimi.awt.repository.UserRepository;
 import com.polimi.awt.security.CurrentUser;
 import com.polimi.awt.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,48 +70,48 @@ public class CampaignController {
 
     @PatchMapping("/campaigns/{campaignId}")
     @PreAuthorize("hasAuthority('MANAGER')")
-    public ResponseEntity updateCampaignStatus(@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
+    public ApiResponse updateCampaignStatus(@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
+
         Manager manager = (Manager) userRepository.findUserById(currentUser.getId());
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
-        if (campaign.getManager().equals(manager)) {
-            campaignRepository.save(manager.updateCampaignStatus(campaign));
-            return ResponseEntity.status(HttpStatus.OK).body("Updated status to " + campaign.getCampaignStatus());
+
+        if (!campaign.getManager().equals(manager)) {
+            throw  new PreconditionFailedException("You are not authorized to change the status of this campaign.");
         }
-        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).
-                body("You are not authorized to change the status of this campaign");
+
+        campaignRepository.save(manager.updateCampaignStatus(campaign));
+        return new OkResponse("Updated status to " + campaign.getCampaignStatus());
     }
 
     @PostMapping("/campaigns/{campaignId}")
     @PreAuthorize("hasAuthority('WORKER')")
-    public ResponseEntity enrollInCampaign(@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
+    public ApiResponse enrollInCampaign(@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
 
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
         if (!campaign.getCampaignStatus().equals(CampaignStatus.STARTED)) {
-            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).
-                    body("You cannot enroll in this campaign.");
+            throw new PreconditionFailedException("You cannot enroll in this campaign.");
         }
         Worker worker = (Worker) userRepository.findUserById(currentUser.getId());
         campaignRepository.save(worker.enrollInCampaign(campaign));
-        return ResponseEntity.status(HttpStatus.OK).
-                body("Enrolled successfully in Campaign " + campaign.getName());
+        return new OkResponse("Enrolled successfully in Campaign " + campaign.getName());
     }
 
     @GetMapping("campaigns/{campaignId}/statistics")
     @PreAuthorize("hasAuthority('MANAGER')")
     public CampaignStatistics getCampaignStatistics (@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
 
-//        Campaign campaign = campaignRepository.findCampaignById(campaignId);
+        Campaign campaign = campaignRepository.findCampaignById(campaignId);
+        if (!campaign.getManager().getId().equals(currentUser.getId())) {
+            throw new UnauthorizedException();
+        }
 
-//        if (!campaign.getManager().ownsCampaign(campaign)) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).
-//                    body("You are not authorized to access this resource.");
-//        }
         int totalNumberOfPeaks = peakRepository.countPeaksByCampaignId(campaignId);
         int numberOfAnnotatedPeaks = annotationRepository.countPeaksInAnnotatedState(campaignId);
         int numberOfStartedPeaks = totalNumberOfPeaks - numberOfAnnotatedPeaks;
 
         return new CampaignStatistics(numberOfStartedPeaks, numberOfAnnotatedPeaks,
-                annotationRepository.countPeaksWithRejectedAnnotations(campaignId), annotationRepository.countNumberOfConflictsByCampaignId(campaignId));
+                annotationRepository.countPeaksWithRejectedAnnotations(campaignId),
+                annotationRepository.countNumberOfConflictsByCampaignId(campaignId));
     }
 
 }

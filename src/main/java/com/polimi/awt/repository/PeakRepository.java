@@ -11,4 +11,6 @@ public interface PeakRepository extends JpaRepository<Peak, Long> {
     Set <Peak> findAllByCampaignId(Long campaignId);
 
     Peak findPeakById (Long peakId);
+
+    int countPeaksByCampaignId(Long campaignId);
 }

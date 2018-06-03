@@ -101,4 +101,10 @@ public abstract class User {
         }
         return false;
     }
+
+    public void updateInformation(String username, String emailAddress, String password) {
+        this.username = username;
+        this.emailAddress = emailAddress;
+        this.password = password;
+    }
 }

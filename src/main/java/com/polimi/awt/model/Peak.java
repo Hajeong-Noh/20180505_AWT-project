@@ -2,6 +2,7 @@ package com.polimi.awt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.polimi.awt.exception.PreconditionFailedException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -99,10 +100,9 @@ public class Peak {
         this.toBeAnnotated = toBeAnnotated;
     }
 
-    public void inverseToBeAnnotated () {
-        //TODO: add exception
+    public void inverseToBeAnnotated () throws PreconditionFailedException {
         if (this.campaign.getCampaignStatus() != CampaignStatus.CREATED) {
-            throw new RuntimeException("The property can only be changed if the campaign is in the CREATED status.");
+            throw new PreconditionFailedException("The property can only be changed if the campaign is in the CREATED status.");
         }
         this.toBeAnnotated = !this.toBeAnnotated;
     }

@@ -29,9 +29,7 @@ public class UserController {
     private UpdateUserRequest updateUsername (@CurrentUser UserPrincipal principal, @RequestBody UpdateUserRequest update) {
 
         User user = userRepository.findUserById(principal.getId());
-        user.setUsername(update.getUsername());
-        user.setEmailAddress(update.getEmail());
-        user.setPassword(passwordEncoder.encode(update.getPassword()));
+        user.updateInformation(update.getUsername(), update.getEmail(), passwordEncoder.encode(update.getPassword()));
         userRepository.save(user);
         return update;
     }
