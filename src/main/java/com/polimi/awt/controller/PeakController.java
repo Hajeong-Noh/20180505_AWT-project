@@ -25,12 +25,12 @@ public class PeakController {
     private CampaignRepository campaignRepository;
 
     @GetMapping("/campaigns/{campaignId}/peaks")
-    private Set<Peak> getPeaksForCampaign(@PathVariable Long campaignId) {
+    public Set<Peak> getPeaksForCampaign(@PathVariable Long campaignId) {
         return peakRepository.findAllByCampaignId(campaignId);
     }
 
     @GetMapping("/campaigns/{campaignId}/peaks/{peakId}")
-    private Peak findPeakById(@PathVariable Long peakId) {
+    public Peak findPeakById(@PathVariable Long peakId) {
         return peakRepository.findPeakById(peakId);
     }
 
@@ -57,7 +57,7 @@ public class PeakController {
 
     @PatchMapping("/campaigns/{campaignId}/peaks/{peakId}")
     @PreAuthorize("hasAuthority('MANAGER')")
-    private ResponseEntity setToBeAnnotated(@CurrentUser UserPrincipal currentUser, @PathVariable Long peakId) {
+    public ResponseEntity setToBeAnnotated(@CurrentUser UserPrincipal currentUser, @PathVariable Long peakId) {
         Peak peak = peakRepository.findPeakById(peakId);
         if (peak.getCampaign().getManager().getId().equals(currentUser.getId())) {
 
@@ -73,5 +73,4 @@ public class PeakController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).
                     body("You are not authorized to edit this peak.");
     }
-
 }
