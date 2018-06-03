@@ -1,5 +1,6 @@
 package com.polimi.awt.controller;
 
+import com.polimi.awt.exception.UnauthorizedException;
 import com.polimi.awt.model.Annotation;
 import com.polimi.awt.model.Peak;
 import com.polimi.awt.model.users.Manager;
@@ -68,8 +69,6 @@ public class AnnotationController {
             annotationRepository.save(manager.updateAnnotationStatus(annotation, request.isAcceptedByManager()));
             return ResponseEntity.status(HttpStatus.OK).body("Successful");
         }
-        else
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).
-                    body("You are not authorized to accept or reject this annotation.");
+        else throw new UnauthorizedException();
     }
 }
