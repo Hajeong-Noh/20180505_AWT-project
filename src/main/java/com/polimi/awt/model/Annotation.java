@@ -16,7 +16,7 @@ public class Annotation {
     private Long id;
 
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "creation_date")
     private LocalDateTime creationDateTime;
 
     private boolean isValid;
