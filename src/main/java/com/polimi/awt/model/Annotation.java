@@ -27,7 +27,8 @@ public class Annotation {
     @JoinColumn(name = "annotation_id", referencedColumnName = "id")
     private Set<LocalizedPeakName> localizedPeakNames;
 
-    private boolean isAcceptedByManager;
+    @Column(nullable = true)
+    private Boolean isAcceptedByManager;
 
     @ManyToOne
     private Peak peak;
