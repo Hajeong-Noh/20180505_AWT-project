@@ -15,6 +15,7 @@ import com.polimi.awt.repository.PeakRepository;
 import com.polimi.awt.repository.UserRepository;
 import com.polimi.awt.security.CurrentUser;
 import com.polimi.awt.security.UserPrincipal;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
+@Api(description="Operations related to Annotations", tags = "Annotations")
 public class AnnotationController {
 
     @Autowired

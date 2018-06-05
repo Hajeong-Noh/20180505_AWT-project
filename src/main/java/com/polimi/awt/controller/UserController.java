@@ -5,12 +5,14 @@ import com.polimi.awt.payload.UpdateUserRequest;
 import com.polimi.awt.repository.UserRepository;
 import com.polimi.awt.security.CurrentUser;
 import com.polimi.awt.security.UserPrincipal;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
+@Api(description="Get and update User information", tags = "Annotations")
 public class UserController {
 
     @Autowired
