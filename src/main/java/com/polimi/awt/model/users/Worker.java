@@ -43,4 +43,12 @@ public class Worker extends User {
         newAnnotation.setWorkerId(workerId);
         return newAnnotation;
     }
+
+    public Set<Campaign> getEnrolledCampaigns() {
+        return enrolledCampaigns;
+    }
+
+    public void setEnrolledCampaigns(Set<Campaign> enrolledCampaigns) {
+        this.enrolledCampaigns = enrolledCampaigns;
+    }
 }
