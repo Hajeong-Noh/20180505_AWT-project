@@ -17,7 +17,13 @@ public interface AnnotationRepository extends JpaRepository<Annotation, Long> {
             "FROM annotation a JOIN user u ON  worker_id = u.id WHERE peak_id = :peakId", nativeQuery = true)
     Set<Annotation> findAllByPeakId(@Param("peakId") Long peakId);
 
-    Annotation findAnnotationById(Long annotationId);
+    @Query(value = "SELECT a.id, username, creation_date_time, name, elevation, is_valid, is_accepted_by_manager " +
+            "FROM annotation a JOIN user u ON worker_id = u.id WHERE peak_id = :peakId", nativeQuery = true)
+    List<Annotation> findAllByPeakId(@Param("peakId") Long peakId);
+
+    @Query(value = "SELECT a.id, username, creation_date_time, name, elevation, is_valid, is_accepted_by_manager " +
+            "FROM annotation a JOIN user u ON worker_id = u.id WHERE a.id = :annotationId", nativeQuery = true)
+    Annotation findAnnotationById(@Param("annotationId") Long annotationId);
 
     Annotation findAnnotationByPeakAndWorkerId(Peak peak, Long workerId);
 

@@ -21,4 +21,10 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
     @Query(value = "SELECT * FROM campaign c JOIN user_enrolled_campaigns uec " +
             "WHERE c.id = uec.enrolled_campaigns_id AND uec.worker_id = :workerId", nativeQuery = true)
     List<Campaign> findEnrolledCampaigns(@Param("workerId") Long workerId);
+
+    @Query(value = "SELECT * " +
+            "FROM campaign c LEFT JOIN user_enrolled_campaigns uec ON c.id = uec.enrolled_campaigns_id " +
+            "WHERE campaign_status = 'STARTED' AND (worker_id IS NULL OR NOT worker_id = :workerId)",
+            nativeQuery = true)
+    List<Campaign> findNotEnrolledCampaigns(@Param("workerId") Long workerId);
 }
