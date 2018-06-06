@@ -45,7 +45,7 @@ public class CampaignController {
 
 
     @GetMapping("/campaigns")
-    public List<Campaign> getCampaigns(@CurrentUser UserPrincipal currentUser) {
+    public List<Campaign> getCampaigns(@CurrentUser UserPrincipal currentUser, @RequestParam boolean enrolled) {
         User user = userRepository.findUserById(currentUser.getId());
         //Return all owned campaigns if user is a Manager
         if (user.rolesContainsRoleName(MANAGER)) {
@@ -53,8 +53,10 @@ public class CampaignController {
         }
         /*//Return all campaigns with status STARTED if user is a Worker
         return campaignRepository.findCampaignByCampaignStatus(CampaignStatus.STARTED);*/
-
+    if (enrolled)
         return campaignRepository.findEnrolledCampaigns(currentUser.getId());
+
+    return campaignRepository.findNotEnrolledCampaigns(currentUser.getId());
     }
 
     @GetMapping("/campaigns/{campaignId}")
