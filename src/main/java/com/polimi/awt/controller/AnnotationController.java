@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -35,12 +35,12 @@ public class AnnotationController {
     private UserRepository userRepository;
 
     @GetMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations")
-    private Set<Annotation> getAnnotationsForPeak (@PathVariable Long peakId) {
+    public List<Annotation> getAnnotationsForPeak(@PathVariable Long peakId) {
         return annotationRepository.findAllByPeakId(peakId);
     }
 
     @GetMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations/{annotationId}")
-    private Annotation findAnnotationById (@PathVariable Long annotationId) {
+    public Annotation findAnnotationById(@PathVariable Long annotationId) {
         return annotationRepository.findAnnotationById(annotationId);
     }
 
