@@ -3,6 +3,7 @@ package com.polimi.awt.controller;
 import com.polimi.awt.exception.PreconditionFailedException;
 import com.polimi.awt.exception.UnauthorizedException;
 import com.polimi.awt.model.Annotation;
+import com.polimi.awt.model.Campaign;
 import com.polimi.awt.model.Peak;
 import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.Worker;
@@ -11,6 +12,7 @@ import com.polimi.awt.payload.HttpResponseStatus.ApiResponse;
 import com.polimi.awt.payload.HttpResponseStatus.CreatedResponse;
 import com.polimi.awt.payload.HttpResponseStatus.OkResponse;
 import com.polimi.awt.repository.AnnotationRepository;
+import com.polimi.awt.repository.CampaignRepository;
 import com.polimi.awt.repository.PeakRepository;
 import com.polimi.awt.repository.UserRepository;
 import com.polimi.awt.security.CurrentUser;
@@ -33,6 +35,8 @@ public class AnnotationController {
     private PeakRepository peakRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CampaignRepository campaignRepository;
 
     @GetMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations")
     private Set<Annotation> getAnnotationsForPeak (@PathVariable Long peakId) {
@@ -47,17 +51,33 @@ public class AnnotationController {
     @PostMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations")
     @PreAuthorize("hasAuthority('WORKER')")
     public ApiResponse createAnnotation (@CurrentUser UserPrincipal currentUser,
-                                         @PathVariable Long peakId, @RequestBody AnnotationRequest request){
+                                         @PathVariable Long peakId, @PathVariable Long campaignId,
+                                         @RequestBody AnnotationRequest request){
 
         Worker worker = (Worker) userRepository.findUserById(currentUser.getId());
+        Campaign campaign = campaignRepository.findCampaignById(campaignId);
+
+        if (!worker.getEnrolledCampaigns().contains(campaign)) {
+            throw new UnauthorizedException("You are not enrolled in this campaign");
+        }
+
         Peak peak = peakRepository.findPeakById(peakId);
 
-        if (annotationRepository.findAnnotationByPeakAndWorkerId(peak, currentUser.getId()) == null) {
-            annotationRepository.save(worker.createAnnotation(peak, request.getValid(), request.getElevation(),
-                    request.getName(), request.getLocalizedPeakNames(), currentUser.getId()));
-            return new CreatedResponse();
+        if (annotationRepository.existsAnnotationByPeakAndWorkerId(peak, worker.getId())) {
+            throw new PreconditionFailedException("You can add maximum one annotation for a peak.");
         }
-        else throw new PreconditionFailedException("You can add maximum one annotation for a peak.");
+
+        annotationRepository.save(
+                worker.createAnnotation(
+                        peak,
+                        request.getValid(),
+                        request.getElevation(),
+                        request.getName(),
+                        request.getLocalizedPeakNames(),
+                        currentUser.getId()
+                )
+        );
+        return new CreatedResponse();
     }
 
     @PatchMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations/{annotationId}")
