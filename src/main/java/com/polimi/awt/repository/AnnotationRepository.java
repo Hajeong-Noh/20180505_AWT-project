@@ -12,11 +12,16 @@ import java.util.Set;
 
 @Repository
 public interface AnnotationRepository extends JpaRepository<Annotation, Long> {
-    Set<Annotation> findAllByPeakId(Long peakId);
+
+    @Query(value = "SELECT a.id, username, creation_date, name, elevation, is_valid, is_accepted_by_manager " +
+            "FROM annotation a JOIN user u ON  worker_id = u.id WHERE peak_id = :peakId", nativeQuery = true)
+    Set<Annotation> findAllByPeakId(@Param("peakId") Long peakId);
 
     Annotation findAnnotationById(Long annotationId);
 
     Annotation findAnnotationByPeakAndWorkerId(Peak peak, Long workerId);
+
+    boolean existsAnnotationByPeakAndWorkerId(Peak peak, Long workerId);
 
     @Query(value = "SELECT * FROM annotation an LEFT JOIN localized_peak_name lpn on an.id = lpn.annotation_id WHERE an.peak_id IN " +
             "(SELECT peak.id FROM peak WHERE campaign_id = :campaignId AND peak.to_be_annotated = 1)"
