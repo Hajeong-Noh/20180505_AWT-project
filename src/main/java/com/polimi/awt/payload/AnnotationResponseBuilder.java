@@ -10,7 +10,7 @@ public class AnnotationResponseBuilder {
     public AnnotationResponseBuilder() {
     }
 
-    public AnnotationResponse build (Annotation annotation) {
+    public AnnotationResponse buildOne(Annotation annotation) {
         return new AnnotationResponse(
 
                 annotation.getId(),
@@ -29,7 +29,7 @@ public class AnnotationResponseBuilder {
 
         for (Annotation annotation: annotations
              ) {
-            responses.add(this.build(annotation));
+            responses.add(this.buildOne(annotation));
         }
         return responses;
     }
