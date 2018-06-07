@@ -12,12 +12,14 @@ import java.util.List;
 @Repository
 public interface AnnotationRepository extends JpaRepository<Annotation, Long> {
 
-    @Query(value = "SELECT a.id, username, creation_date, name, elevation, is_valid, is_accepted_by_manager " +
+    @Query(value = "SELECT a.id, username, creation_date_time, name, elevation, is_valid, is_accepted_by_manager " +
             "FROM annotation a JOIN user u ON  worker_id = u.id WHERE peak_id = :peakId", nativeQuery = true)
     List<Annotation> findAllByPeakId(@Param("peakId") Long peakId);
 
 
     Annotation findAnnotationById(Long annotationId);
+
+    List<Annotation> findAnnotationsByPeakId(Long peakId);
 
     Annotation findAnnotationByPeakAndWorkerId(Peak peak, Long workerId);
 

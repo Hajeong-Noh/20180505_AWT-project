@@ -2,6 +2,9 @@ package com.polimi.awt.payload;
 
 import com.polimi.awt.model.Annotation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AnnotationResponseBuilder {
 
     public AnnotationResponseBuilder() {
@@ -18,5 +21,16 @@ public class AnnotationResponseBuilder {
                 annotation.isAcceptedByManager(),
                 annotation.getPeak().getId(),
                 annotation.getWorker().getUsername());
+    }
+
+    public List<AnnotationResponse> buildList (List<Annotation> annotations) {
+
+        List<AnnotationResponse> responses = new ArrayList<>();
+
+        for (Annotation annotation: annotations
+             ) {
+            responses.add(this.build(annotation));
+        }
+        return responses;
     }
 }

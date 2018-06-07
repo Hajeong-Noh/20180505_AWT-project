@@ -41,8 +41,10 @@ public class AnnotationController {
     private CampaignRepository campaignRepository;
 
     @GetMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations")
-    public List<Annotation> getAnnotationsForPeak(@PathVariable Long peakId) {
-        return annotationRepository.findAllByPeakId(peakId);
+    public List<AnnotationResponse> getAnnotationsForPeak(@PathVariable Long peakId) {
+
+        List<Annotation> annotations = annotationRepository.findAnnotationsByPeakId(peakId);
+        return new AnnotationResponseBuilder().buildList(annotations);
     }
 
     @GetMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations/{annotationId}")
@@ -86,7 +88,7 @@ public class AnnotationController {
     @PatchMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations/{annotationId}")
     @PreAuthorize("hasAuthority('MANAGER')")
     public ApiResponse updateAnnotationStatus(@CurrentUser UserPrincipal currentUser, @PathVariable Long annotationId,
-                                                 @RequestBody AnnotationRequest request) {
+                                                 @RequestParam(value = "accepted") boolean isAccepted) {
 
         Manager manager = (Manager) userRepository.findUserById(currentUser.getId());
         Annotation annotation = annotationRepository.findAnnotationById(annotationId);
@@ -97,8 +99,7 @@ public class AnnotationController {
             throw new UnauthorizedException();
         }
 
-        manager.updateAnnotationStatus(annotation, request.isAcceptedByManager());
-        annotationRepository.save(manager.updateAnnotationStatus(annotation, request.isAcceptedByManager()));
+        annotationRepository.save(manager.updateAnnotationStatus(annotation, isAccepted));
         return new OkResponse();
     }
 }
