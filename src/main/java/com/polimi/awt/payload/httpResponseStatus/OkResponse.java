@@ -1,4 +1,4 @@
-package com.polimi.awt.payload.HttpResponseStatus;
+package com.polimi.awt.payload.httpResponseStatus;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,4 +1,4 @@
-package com.polimi.awt.payload.HttpResponseStatus;
+package com.polimi.awt.payload.httpResponseStatus;
 
 public abstract class ApiResponse {
     private String message;
