@@ -1,17 +1,16 @@
 package com.polimi.awt.controller;
 
 
-
 import com.polimi.awt.exception.PreconditionFailedException;
 import com.polimi.awt.model.RoleName;
 import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.User;
 import com.polimi.awt.model.users.Worker;
-import com.polimi.awt.payload.HttpResponseStatus.ApiResponse;
-import com.polimi.awt.payload.HttpResponseStatus.CreatedResponse;
 import com.polimi.awt.payload.JwtAuthenticationResponse;
 import com.polimi.awt.payload.LoginRequest;
 import com.polimi.awt.payload.SignUpRequest;
+import com.polimi.awt.payload.httpResponseStatus.ApiResponse;
+import com.polimi.awt.payload.httpResponseStatus.CreatedResponse;
 import com.polimi.awt.repository.RoleRepository;
 import com.polimi.awt.repository.UserRepository;
 import com.polimi.awt.security.JwtTokenProvider;
