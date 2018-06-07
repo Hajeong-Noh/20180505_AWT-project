@@ -1,6 +1,7 @@
 package com.polimi.awt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.polimi.awt.model.users.Manager;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @Entity
 @JsonIgnoreProperties("manager")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Campaign {
 
     @Id
