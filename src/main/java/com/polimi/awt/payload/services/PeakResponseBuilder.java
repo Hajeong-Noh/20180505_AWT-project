@@ -1,6 +1,7 @@
-package com.polimi.awt.payload;
+package com.polimi.awt.payload.services;
 
 import com.polimi.awt.model.Peak;
+import com.polimi.awt.payload.PeakResponse;
 
 import java.util.ArrayList;
 import java.util.List;
