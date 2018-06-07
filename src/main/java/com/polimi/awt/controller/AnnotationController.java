@@ -50,7 +50,7 @@ public class AnnotationController {
     @GetMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations/{annotationId}")
     public AnnotationResponse findAnnotationById(@PathVariable Long annotationId) {
         Annotation annotation = annotationRepository.findAnnotationById(annotationId);
-        return new AnnotationResponseBuilder().build(annotation);
+        return new AnnotationResponseBuilder().buildOne(annotation);
     }
 
     @PostMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations")
@@ -75,8 +75,6 @@ public class AnnotationController {
         if (annotationRepository.existsAnnotationByPeakAndWorkerId(peak, worker.getId())) {
             throw new PreconditionFailedException("You can add maximum one annotation for a peak.");
         }
-
-
 
         annotationRepository.save(
                 worker.createAnnotation(
