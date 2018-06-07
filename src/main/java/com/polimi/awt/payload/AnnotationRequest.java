@@ -1,13 +1,12 @@
 package com.polimi.awt.payload;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.polimi.awt.model.LocalizedPeakName;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnnotationRequest {
-    private Long managerId;
-
-    private Long workerId;
 
     private boolean isValid;
 
@@ -15,25 +14,10 @@ public class AnnotationRequest {
 
     private String name;
 
-    private Set<LocalizedPeakName> localizedPeakNames;
+    @JsonProperty(value = "localized_names")
+    private List<LocalizedPeakName> localizedPeakNames = new ArrayList<>();
 
     private boolean isAcceptedByManager;
-
-    public Long getManagerId() {
-        return managerId;
-    }
-
-    public void setManagerId(Long managerId) {
-        this.managerId = managerId;
-    }
-
-    public Long getWorkerId() {
-        return workerId;
-    }
-
-    public void setWorkerId(Long workerId) {
-        this.workerId = workerId;
-    }
 
     public Boolean getValid() {
         return isValid;
@@ -59,11 +43,11 @@ public class AnnotationRequest {
         this.name = name;
     }
 
-    public Set<LocalizedPeakName> getLocalizedPeakNames() {
+    public List<LocalizedPeakName> getLocalizedPeakNames() {
         return localizedPeakNames;
     }
 
-    public void setLocalizedPeakNames(Set<LocalizedPeakName> localizedPeakNames) {
+    public void setLocalizedPeakNames(ArrayList<LocalizedPeakName> localizedPeakNames) {
         this.localizedPeakNames = localizedPeakNames;
     }
 

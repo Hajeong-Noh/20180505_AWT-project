@@ -8,6 +8,8 @@ import com.polimi.awt.model.Peak;
 import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.Worker;
 import com.polimi.awt.payload.AnnotationRequest;
+import com.polimi.awt.payload.AnnotationResponse;
+import com.polimi.awt.payload.AnnotationResponseBuilder;
 import com.polimi.awt.payload.HttpResponseStatus.ApiResponse;
 import com.polimi.awt.payload.HttpResponseStatus.CreatedResponse;
 import com.polimi.awt.payload.HttpResponseStatus.OkResponse;
@@ -44,8 +46,9 @@ public class AnnotationController {
     }
 
     @GetMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations/{annotationId}")
-    public Annotation findAnnotationById(@PathVariable Long annotationId) {
-        return annotationRepository.findAnnotationById(annotationId);
+    public AnnotationResponse findAnnotationById(@PathVariable Long annotationId) {
+        Annotation annotation = annotationRepository.findAnnotationById(annotationId);
+        return new AnnotationResponseBuilder().build(annotation);
     }
 
     @PostMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations")

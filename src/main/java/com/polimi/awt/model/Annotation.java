@@ -1,10 +1,15 @@
 package com.polimi.awt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.polimi.awt.model.users.User;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @JsonIgnoreProperties("peak")
@@ -15,16 +20,18 @@ public class Annotation {
     private Long id;
 
 
-    @Column(nullable = false, updatable = false, name = "creation_date_time")
+    @Column(nullable = false, updatable = false)
     private LocalDateTime creationDateTime;
 
     private boolean isValid;
     private double elevation;
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(name = "annotation_id", referencedColumnName = "id")
-    private Set<LocalizedPeakName> localizedPeakNames;
+    @JsonProperty(value = "localized_names")
+    private List<LocalizedPeakName> localizedPeakNames = new ArrayList<>();
 
     @Column(nullable = true)
     private Boolean isAcceptedByManager;
@@ -32,7 +39,8 @@ public class Annotation {
     @ManyToOne
     private Peak peak;
 
-    private Long workerId;
+    @OneToOne
+    private User worker;
 
     public Long getId() {
         return id;
@@ -74,15 +82,15 @@ public class Annotation {
         this.name = name;
     }
 
-    public Set<LocalizedPeakName> getLocalizedPeakNames() {
+    public List<LocalizedPeakName> getLocalizedPeakNames() {
         return localizedPeakNames;
     }
 
-    public void setLocalizedPeakNames(Set<LocalizedPeakName> localizedPeakNames) {
+    public void setLocalizedPeakNames(List<LocalizedPeakName> localizedPeakNames) {
         this.localizedPeakNames = localizedPeakNames;
     }
 
-    public boolean isAcceptedByManager() {
+    public Boolean isAcceptedByManager() {
         return isAcceptedByManager;
     }
 
@@ -98,11 +106,19 @@ public class Annotation {
         this.peak = peak;
     }
 
-    public Long getWorkerId() {
-        return workerId;
+    public User getWorker() {
+        return worker;
     }
 
-    public void setWorkerId(Long workerId) {
-        this.workerId = workerId;
+    public void setWorker(User worker) {
+        this.worker = worker;
+    }
+
+    public Boolean getAcceptedByManager() {
+        return isAcceptedByManager;
+    }
+
+    public void setAcceptedByManager(Boolean acceptedByManager) {
+        isAcceptedByManager = acceptedByManager;
     }
 }
