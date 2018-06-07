@@ -45,9 +45,8 @@ public interface AnnotationRepository extends JpaRepository<Annotation, Long> {
             , nativeQuery = true)
     int countPeaksWithRejectedAnnotations(@Param("campaignId") Long campaignId);
 
-    @Query(value = "    SELECT count(*) as conflicts FROM (SELECT count(DISTINCT is_valid) as conflicts FROM annotation an " +
-            "WHERE an.peak_id IN  (SELECT id from peak WHERE peak.campaign_id = :campaignId)" +
-            "GROUP BY an.peak_id HAVING conflicts > 1) as helper",
+    @Query(value = "select count(*) as conflicts from " +
+            "(select peak_id from peak p join annotation a on p.id = a.peak_id where p.campaign_id = :campaignId group by peak_id having count(*) > 1 and min(is_valid) = 0 and max(is_valid) =1) conflictPeaks",
             nativeQuery = true)
     int countNumberOfConflictsByCampaignId(@Param("campaignId") Long campaignId);
 

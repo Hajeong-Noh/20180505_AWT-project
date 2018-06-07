@@ -9,11 +9,10 @@ import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.User;
 import com.polimi.awt.model.users.Worker;
 import com.polimi.awt.payload.CampaignRequest;
-import com.polimi.awt.payload.HttpResponseStatus.ApiResponse;
-import com.polimi.awt.payload.HttpResponseStatus.OkResponse;
-import com.polimi.awt.repository.AnnotationRepository;
+import com.polimi.awt.payload.httpResponseStatus.ApiResponse;
+import com.polimi.awt.payload.httpResponseStatus.OkResponse;
+import com.polimi.awt.payload.services.CampaignStatisticsBuilder;
 import com.polimi.awt.repository.CampaignRepository;
-import com.polimi.awt.repository.PeakRepository;
 import com.polimi.awt.repository.UserRepository;
 import com.polimi.awt.security.CurrentUser;
 import com.polimi.awt.security.UserPrincipal;
@@ -28,7 +27,7 @@ import static com.polimi.awt.model.RoleName.MANAGER;
 
 @RestController
 @RequestMapping("/api")
-@Api(description="Operations related to Campaigns", tags = "Campaigns")
+@Api(description = "Operations related to Campaigns", tags = "Campaigns")
 public class CampaignController {
 
     @Autowired
@@ -37,16 +36,12 @@ public class CampaignController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private AnnotationRepository annotationRepository;
-
-    @Autowired
-    private PeakRepository peakRepository;
-
+   @Autowired
+    private CampaignStatisticsBuilder campaignStatisticsBuilder;
 
     @GetMapping("/campaigns")
     public List<Campaign> getCampaigns(@CurrentUser UserPrincipal currentUser,
-                                       @RequestParam(required=false) boolean enrolled) {
+                                       @RequestParam(required = false) boolean enrolled) {
         User user = userRepository.findUserById(currentUser.getId());
         //Return all owned campaigns if user is a Manager
         if (user.rolesContainsRoleName(MANAGER)) {
@@ -79,7 +74,7 @@ public class CampaignController {
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
 
         if (!campaign.getManager().equals(manager)) {
-            throw  new PreconditionFailedException("You are not authorized to change the status of this campaign.");
+            throw new PreconditionFailedException("You are not authorized to change the status of this campaign.");
         }
 
         campaignRepository.save(manager.updateCampaignStatus(campaign));
@@ -101,20 +96,13 @@ public class CampaignController {
 
     @GetMapping("campaigns/{campaignId}/statistics")
     @PreAuthorize("hasAuthority('MANAGER')")
-    public CampaignStatistics getCampaignStatistics (@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
+    public CampaignStatistics getCampaignStatistics(@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
 
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
         if (!campaign.getManager().getId().equals(currentUser.getId())) {
             throw new UnauthorizedException();
         }
-
-        int totalNumberOfPeaks = peakRepository.countPeaksByCampaignId(campaignId);
-        int numberOfAnnotatedPeaks = annotationRepository.countPeaksInAnnotatedState(campaignId);
-        int numberOfStartedPeaks = totalNumberOfPeaks - numberOfAnnotatedPeaks;
-
-        return new CampaignStatistics(numberOfStartedPeaks, numberOfAnnotatedPeaks,
-                annotationRepository.countPeaksWithRejectedAnnotations(campaignId),
-                annotationRepository.countNumberOfConflictsByCampaignId(campaignId));
+        return campaignStatisticsBuilder.buildForCampaign(campaignId);
     }
 
 }
