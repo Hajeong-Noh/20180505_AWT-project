@@ -68,9 +68,15 @@ public class AnnotationController {
 
         Peak peak = peakRepository.findPeakById(peakId);
 
+        if (!peak.isToBeAnnotated()) {
+            throw new PreconditionFailedException("This peak cannot be annotated");
+        }
+
         if (annotationRepository.existsAnnotationByPeakAndWorkerId(peak, worker.getId())) {
             throw new PreconditionFailedException("You can add maximum one annotation for a peak.");
         }
+
+
 
         annotationRepository.save(
                 worker.createAnnotation(
