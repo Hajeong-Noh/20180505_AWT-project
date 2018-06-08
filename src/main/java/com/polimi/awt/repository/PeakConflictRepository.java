@@ -18,7 +18,7 @@ public class PeakConflictRepository {
     public List<PeakConflict> findPeakConflictsByCampaignId(Long campaignId) {
 
         List<Object[]> resultListHelper = entitiyManager.createNativeQuery("select p.id peakId, p.name peakName, " +
-                "count(is_valid) numberOfAnnotationsWithValidPeak, count(!is_valid) numberOfAnnotationsWithInvalidPeak " +
+                "sum(is_valid) numberOfAnnotationsWithValidPeak, sum(!is_valid) numberOfAnnotationsWithInvalidPeak " +
                 "from peak p join annotation a on p.id = a.peak_id " +
                 "where p.campaign_id = :campaignId " +
                 "group by peak_id " +
