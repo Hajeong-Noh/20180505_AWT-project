@@ -2,9 +2,11 @@ package com.polimi.awt.payload.httpResponseStatus;
 
 public abstract class ApiResponse {
     private String message;
+    private boolean success;
 
-    public ApiResponse(String message) {
+    public ApiResponse(String message, boolean success) {
         this.message = message;
+        this.success = success;
     }
 
     public String getMessage() {
@@ -13,5 +15,13 @@ public abstract class ApiResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 }

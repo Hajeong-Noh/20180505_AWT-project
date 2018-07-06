@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class CreatedResponse extends ApiResponse {
 
     public CreatedResponse() {
-        super("Resource created successfully");
+        super("Resource created successfully", true);
     }
 
     public CreatedResponse(String message) {
-        super(message);
+        super(message, true);
     }
 }

@@ -1,9 +1,14 @@
 package com.polimi.awt.payload;
 
+import javax.validation.constraints.NotBlank;
+
 public class UpdateUserRequest {
 
+    @NotBlank
     private String username;
+    @NotBlank
     private String email;
+    @NotBlank
     private String password;
 
     public UpdateUserRequest() {

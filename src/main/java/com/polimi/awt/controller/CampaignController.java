@@ -47,9 +47,9 @@ public class CampaignController {
         if (user.rolesContainsRoleName(MANAGER)) {
             return campaignRepository.findAllByManager_Id(user.getId());
         }
-        if (enrolled)
+        if (enrolled) {
             return campaignRepository.findEnrolledCampaigns(currentUser.getId());
-
+        }
         return campaignRepository.findNotEnrolledCampaigns(currentUser.getId());
     }
 

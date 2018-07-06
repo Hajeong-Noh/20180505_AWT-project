@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class OkResponse extends ApiResponse {
 
     public OkResponse() {
-        super("Successful Operation");
+        super("Successful Operation", true);
     }
 
     public OkResponse(String message) {
-        super(message);
+        super(message,true);
     }
 }

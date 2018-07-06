@@ -2,6 +2,7 @@ package com.polimi.awt.controller;
 
 
 import com.polimi.awt.exception.PreconditionFailedException;
+import com.polimi.awt.exception.UsernameNotFoundException;
 import com.polimi.awt.model.RoleName;
 import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.User;
@@ -52,6 +53,10 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+
+        if (!userRepository.existsByUsername(loginRequest.getUsername())) {
+            throw new UsernameNotFoundException();
+        }
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

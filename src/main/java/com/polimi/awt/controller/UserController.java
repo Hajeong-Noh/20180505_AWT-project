@@ -1,5 +1,6 @@
 package com.polimi.awt.controller;
 
+import com.polimi.awt.exception.PreconditionFailedException;
 import com.polimi.awt.model.users.User;
 import com.polimi.awt.payload.UpdateUserRequest;
 import com.polimi.awt.repository.UserRepository;
@@ -9,6 +10,8 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
@@ -28,8 +31,17 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    private UpdateUserRequest updateUsername (@CurrentUser UserPrincipal principal, @RequestBody UpdateUserRequest update) {
+    @CrossOrigin(origins = "http://localhost:4200")
+    private UpdateUserRequest updateUsername (@CurrentUser UserPrincipal principal, @RequestBody @Valid UpdateUserRequest update) {
 
+        if (userRepository.existsByUsername(update.getUsername())) {
+
+            if(!userRepository.findUserByUsername(update.getUsername())
+                    .getId()
+                    .equals(principal.getId())){
+                throw new PreconditionFailedException("Username already exists.");
+            }
+        }
         User user = userRepository.findUserById(principal.getId());
         user.updateInformation(update.getUsername(), update.getEmail(), passwordEncoder.encode(update.getPassword()));
         userRepository.save(user);

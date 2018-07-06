@@ -1,6 +1,7 @@
 package com.polimi.awt.model.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.polimi.awt.model.Role;
 import com.polimi.awt.model.RoleName;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -28,6 +29,7 @@ public abstract class User {
     private String password;
 
     @NotBlank
+    @JsonProperty(value = "email")
     private String emailAddress;
 
     @ManyToMany
