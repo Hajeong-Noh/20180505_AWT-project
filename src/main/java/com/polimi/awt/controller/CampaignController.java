@@ -1,6 +1,7 @@
 package com.polimi.awt.controller;
 
 import com.polimi.awt.exception.PreconditionFailedException;
+import com.polimi.awt.exception.ResourceNotFoundException;
 import com.polimi.awt.exception.UnauthorizedException;
 import com.polimi.awt.model.Campaign;
 import com.polimi.awt.model.CampaignStatistics;
@@ -55,8 +56,11 @@ public class CampaignController {
 
     @GetMapping("/campaigns/{campaignId}")
     public Campaign getCampaignById(@PathVariable Long campaignId, @CurrentUser UserPrincipal currentUser) {
-
-        return campaignRepository.findCampaignById(campaignId);
+        Campaign campaign = campaignRepository.findCampaignById(campaignId);
+        if (campaign == null){
+            throw new ResourceNotFoundException();
+        }
+        return campaign;
     }
 
     @PostMapping("/campaigns")
@@ -68,6 +72,7 @@ public class CampaignController {
 
     @PatchMapping("/campaigns/{campaignId}")
     @PreAuthorize("hasAuthority('MANAGER')")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ApiResponse updateCampaignStatus(@CurrentUser UserPrincipal currentUser, @PathVariable Long campaignId) {
 
         Manager manager = (Manager) userRepository.findUserById(currentUser.getId());
