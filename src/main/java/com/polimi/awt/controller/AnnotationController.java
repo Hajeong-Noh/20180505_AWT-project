@@ -100,6 +100,7 @@ public class AnnotationController {
 
     @PatchMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations/{annotationId}")
     @PreAuthorize("hasAuthority('MANAGER')")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ApiResponse updateAnnotationStatus(@CurrentUser UserPrincipal currentUser, @PathVariable Long annotationId,
                                                  @RequestParam(value = "accepted") boolean isAccepted) {
 
