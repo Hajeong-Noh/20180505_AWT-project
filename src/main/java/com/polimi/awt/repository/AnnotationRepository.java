@@ -31,6 +31,11 @@ public interface AnnotationRepository extends JpaRepository<Annotation, Long> {
     List<Annotation> findAllAnnotationsByCampaignId(@Param("campaignId") Long campaignId);
 
     @Query(value = "SELECT * FROM annotation an LEFT JOIN localized_peak_name lpn on an.id = lpn.annotation_id WHERE an.peak_id IN " +
+            "(SELECT peak.id FROM peak WHERE campaign_id = :campaignId AND peak.to_be_annotated = 1) AND worker_id = :workerId"
+            , nativeQuery = true)
+    List<Annotation> findAllAnnotationsByCampaignIdandWorkerId(@Param("campaignId") Long campaignId, @Param("workerId") Long workerId);
+
+    @Query(value = "SELECT * FROM annotation an LEFT JOIN localized_peak_name lpn on an.id = lpn.annotation_id WHERE an.peak_id IN " +
             "(SELECT peak.id FROM peak WHERE campaign_id = :campaignId AND peak.to_be_annotated = 1 AND an.is_accepted_by_manager = 0)"
             , nativeQuery = true)
     List<Annotation> findRejectedAnnotationsByCampaignId(@Param("campaignId") Long campaignId);

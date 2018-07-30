@@ -6,11 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="20180505_AWT-project" />
+        <module name="awt" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="20180505_AWT-project" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

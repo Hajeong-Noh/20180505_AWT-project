@@ -53,6 +53,15 @@ public class AnnotationController {
         return new AnnotationResponseBuilder().buildOne(annotation);
     }
 
+    @GetMapping("/campaigns/{campaignId}/annotations")
+    @PreAuthorize("hasAuthority('WORKER')")
+    public List<AnnotationResponse> getAnnotationsForCampaign(@CurrentUser UserPrincipal currentUser,
+                                                              @PathVariable Long campaignId){
+        List<Annotation> annotations = annotationRepository.findAllAnnotationsByCampaignIdandWorkerId(campaignId,
+                currentUser.getId());
+        return new AnnotationResponseBuilder().buildList(annotations);
+    }
+
     @PostMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations")
     @PreAuthorize("hasAuthority('WORKER')")
     public ApiResponse createAnnotation (@CurrentUser UserPrincipal currentUser,
