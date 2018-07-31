@@ -21,6 +21,10 @@ public interface AnnotationRepository extends JpaRepository<Annotation, Long> {
 
     List<Annotation> findAnnotationsByPeakId(Long peakId);
 
+    List<Annotation> findAnnotationsByPeakIdAndIsAcceptedByManagerIsTrue(Long peakId);
+
+    List<Annotation> findAnnotationsByPeakIdAndIsAcceptedByManagerIsFalse(Long peakId);
+
     Annotation findAnnotationByPeakAndWorkerId(Peak peak, Long workerId);
 
     boolean existsAnnotationByPeakAndWorkerId(Peak peak, Long workerId);

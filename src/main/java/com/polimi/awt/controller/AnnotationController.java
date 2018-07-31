@@ -41,9 +41,20 @@ public class AnnotationController {
     private CampaignRepository campaignRepository;
 
     @GetMapping("/campaigns/{campaignId}/peaks/{peakId}/annotations")
-    public List<AnnotationResponse> getAnnotationsForPeak(@PathVariable Long peakId) {
+    public List<AnnotationResponse> getAnnotationsForPeak(@PathVariable Long peakId,
+                                                          @RequestParam(required = false) Boolean accepted) {
 
-        List<Annotation> annotations = annotationRepository.findAnnotationsByPeakId(peakId);
+        List<Annotation> annotations;
+
+        if (accepted == null){
+            annotations = annotationRepository.findAnnotationsByPeakId(peakId);
+        } else {
+            if (accepted.booleanValue()) {
+                annotations = annotationRepository.findAnnotationsByPeakIdAndIsAcceptedByManagerIsTrue(peakId);
+            } else {
+                annotations = annotationRepository.findAnnotationsByPeakIdAndIsAcceptedByManagerIsFalse(peakId);
+            }
+        }
         return new AnnotationResponseBuilder().buildList(annotations);
     }
 
