@@ -12,7 +12,7 @@ public class AnnotationResponse {
 
     private Long id;
     private boolean isValid;
-    private double elevation;
+    private Double elevation;
     private String name;
 
     private List<LocalizedPeakName> localizedPeakNames = new ArrayList<>();
@@ -25,7 +25,7 @@ public class AnnotationResponse {
 
     private LocalDateTime creationDateTime;
 
-    public AnnotationResponse(Long id, boolean isValid, double elevation, String name, List<LocalizedPeakName> localizedPeakNames, Boolean isAcceptedByManager, Long peakId, String workerName, LocalDateTime creationDateTime) {
+    public AnnotationResponse(Long id, boolean isValid, Double elevation, String name, List<LocalizedPeakName> localizedPeakNames, Boolean isAcceptedByManager, Long peakId, String workerName, LocalDateTime creationDateTime) {
         this.id = id;
         this.isValid = isValid;
         this.elevation = elevation;
@@ -53,11 +53,11 @@ public class AnnotationResponse {
         isValid = valid;
     }
 
-    public double getElevation() {
+    public Double getElevation() {
         return elevation;
     }
 
-    public void setElevation(double elevation) {
+    public void setElevation(Double elevation) {
         this.elevation = elevation;
     }
 

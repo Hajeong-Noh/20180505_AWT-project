@@ -9,7 +9,6 @@ import java.util.List;
 public class AnnotationRequest {
 
     private boolean isValid;
-
     private Double elevation;
 
     private String name;

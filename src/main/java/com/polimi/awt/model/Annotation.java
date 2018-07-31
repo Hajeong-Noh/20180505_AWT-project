@@ -24,7 +24,7 @@ public class Annotation {
     private LocalDateTime creationDateTime;
 
     private boolean isValid;
-    private double elevation;
+    private Double elevation;
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -66,11 +66,11 @@ public class Annotation {
         isValid = valid;
     }
 
-    public double getElevation() {
+    public Double getElevation() {
         return elevation;
     }
 
-    public void setElevation(double elevation) {
+    public void setElevation(Double elevation) {
         this.elevation = elevation;
     }
 
