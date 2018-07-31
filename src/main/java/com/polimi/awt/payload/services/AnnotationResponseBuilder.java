@@ -21,7 +21,9 @@ public class AnnotationResponseBuilder {
                 annotation.getLocalizedPeakNames(),
                 annotation.isAcceptedByManager(),
                 annotation.getPeak().getId(),
-                annotation.getWorker().getUsername());
+                annotation.getWorker().getUsername(),
+                annotation.getCreationDateTime()
+        );
     }
 
     public List<AnnotationResponse> buildList (List<Annotation> annotations) {

@@ -3,6 +3,7 @@ package com.polimi.awt.payload;
 
 import com.polimi.awt.model.LocalizedPeakName;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,9 @@ public class AnnotationResponse {
 
     private String workerName;
 
-    public AnnotationResponse(Long id, boolean isValid, double elevation, String name, List<LocalizedPeakName> localizedPeakNames, Boolean isAcceptedByManager, Long peakId, String workerName) {
+    private LocalDateTime creationDateTime;
+
+    public AnnotationResponse(Long id, boolean isValid, double elevation, String name, List<LocalizedPeakName> localizedPeakNames, Boolean isAcceptedByManager, Long peakId, String workerName, LocalDateTime creationDateTime) {
         this.id = id;
         this.isValid = isValid;
         this.elevation = elevation;
@@ -31,6 +34,7 @@ public class AnnotationResponse {
         this.isAcceptedByManager = isAcceptedByManager;
         this.peakId = peakId;
         this.workerName = workerName;
+        this.creationDateTime = creationDateTime;
     }
 
     public Long getId() {
@@ -95,5 +99,13 @@ public class AnnotationResponse {
 
     public void setWorkerName(String workerName) {
         this.workerName = workerName;
+    }
+
+    public LocalDateTime getCreationDateTime() {
+        return creationDateTime;
+    }
+
+    public void setCreationDateTime(LocalDateTime creationDateTime) {
+        this.creationDateTime = creationDateTime;
     }
 }
