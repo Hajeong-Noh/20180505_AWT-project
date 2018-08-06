@@ -13,7 +13,7 @@ import com.polimi.awt.payload.AnnotationResponse;
 import com.polimi.awt.payload.httpResponseStatus.ApiResponse;
 import com.polimi.awt.payload.httpResponseStatus.CreatedResponse;
 import com.polimi.awt.payload.httpResponseStatus.OkResponse;
-import com.polimi.awt.payload.services.AnnotationResponseBuilder;
+import com.polimi.awt.payload.utils.AnnotationResponseBuilder;
 import com.polimi.awt.repository.AnnotationRepository;
 import com.polimi.awt.repository.CampaignRepository;
 import com.polimi.awt.repository.PeakRepository;

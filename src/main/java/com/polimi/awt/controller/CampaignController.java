@@ -12,7 +12,7 @@ import com.polimi.awt.model.users.Worker;
 import com.polimi.awt.payload.CampaignRequest;
 import com.polimi.awt.payload.httpResponseStatus.ApiResponse;
 import com.polimi.awt.payload.httpResponseStatus.OkResponse;
-import com.polimi.awt.payload.services.CampaignStatisticsBuilder;
+import com.polimi.awt.payload.utils.CampaignStatisticsBuilder;
 import com.polimi.awt.repository.CampaignRepository;
 import com.polimi.awt.repository.UserRepository;
 import com.polimi.awt.security.CurrentUser;

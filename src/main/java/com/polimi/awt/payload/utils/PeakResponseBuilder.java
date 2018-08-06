@@ -1,4 +1,4 @@
-package com.polimi.awt.payload.services;
+package com.polimi.awt.payload.utils;
 
 import com.polimi.awt.model.Peak;
 import com.polimi.awt.payload.PeakResponse;

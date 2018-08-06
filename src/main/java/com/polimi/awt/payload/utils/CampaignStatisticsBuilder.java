@@ -1,4 +1,4 @@
-package com.polimi.awt.payload.services;
+package com.polimi.awt.payload.utils;
 
 import com.polimi.awt.model.CampaignStatistics;
 import com.polimi.awt.model.PeakConflict;
