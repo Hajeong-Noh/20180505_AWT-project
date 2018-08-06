@@ -4,6 +4,7 @@ import com.polimi.awt.exception.PreconditionFailedException;
 import com.polimi.awt.exception.UnauthorizedException;
 import com.polimi.awt.model.Annotation;
 import com.polimi.awt.model.Campaign;
+import com.polimi.awt.model.CampaignStatus;
 import com.polimi.awt.model.Peak;
 import com.polimi.awt.model.users.Manager;
 import com.polimi.awt.model.users.Worker;
@@ -81,6 +82,10 @@ public class AnnotationController {
 
         Worker worker = (Worker) userRepository.findUserById(currentUser.getId());
         Campaign campaign = campaignRepository.findCampaignById(campaignId);
+
+        if (campaign.getCampaignStatus().equals(CampaignStatus.CLOSED)){
+            throw new PreconditionFailedException("This campaign is already closed");
+        }
 
         if (!worker.getEnrolledCampaigns().contains(campaign)) {
             throw new UnauthorizedException("You are not enrolled in this campaign");
