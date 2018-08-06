@@ -49,7 +49,7 @@ public class CampaignController {
             return campaignRepository.findAllByManager_Id(user.getId());
         }
         if (enrolled) {
-            return campaignRepository.findEnrolledCampaigns(currentUser.getId());
+            return campaignRepository.findEnrolledAndNotClosedCampaigns(currentUser.getId());
         }
         return campaignRepository.findNotEnrolledCampaigns(currentUser.getId());
     }
